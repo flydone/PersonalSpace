@@ -1,0 +1,234 @@
+cc_defaults {
+    name: "camera_defaults",
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "liblog",
+        "libutils",
+        "libm",
+        "libc",
+        "vendor.gwm.hardware.camera@1.0",
+        "vendor.gwm.common.hardware.psservice.hidl@1.0",
+
+    ],
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-Wno-ignored-attributes",
+        "-Wno-implicit-function-declaration"
+    ],
+}
+
+cc_library_headers {
+    name: "camera_v1_0_common_headers",
+    vendor: true,
+    export_include_dirs: [
+      "impl/include",
+      "impl/include/proxy",
+      "impl/src/fdbus/",
+    ],
+}
+
+// Camera HAL Protobuf library
+cc_library_static {
+    name: "vendor.gwm.hardware.camera@1.0-libproto-fdbus-native",
+    vendor: true,
+    proto: {
+        export_proto_headers: true,
+        type: "lite",
+    },
+    strip: {
+        keep_symbols: true,
+    },
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-ignored-attributes",
+        "-Wno-implicit-function-declaration"
+    ],
+    srcs: [
+      "impl/src/proto/common.base.CameraIviQnx.proto",
+      "impl/src/proto/common.base.CameraIVIServer.proto"
+    ]
+}
+
+/**
+ * Because gwm_mc_dev branch already exists,there is no need go config for MC01.
+bootstrap_go_package {
+    // name and pkgPath need to  according to your module
+    name: "soong-DVR_Config_build",
+    pkgPath: "android/soong/DVRConfigbuild",
+    deps: [
+        "blueprint",
+        "blueprint-pathtools",
+        "soong",
+        "soong-android",
+        "soong-cc",
+        "soong-genrule",
+    ],
+    srcs: [
+          "DVRConfigbuild.go",
+    ],
+    pluginFor: ["soong_build"],
+}
+DVR_Config_build {
+    name: "DVR_Config_build",
+}
+ */
+
+cc_library_static {
+    name: "vendor.gwm.hardware.camera@1.0-impl-lib",
+    relative_install_path: "hw",
+    defaults: ["camera_defaults"],
+    vendor: true,
+    rtti: false,
+    compile_multilib: "64",
+    srcs: [
+        "impl/src/Camera.cpp",
+        "impl/src/DVR.cpp",
+        "impl/src/fdbus/CameraFdbClient.cpp",
+        "impl/src/fdbus/CameraFdbServer.cpp",
+        "impl/src/proxy/DVRFdbProxy.cpp",
+        "impl/src/proxy/DVRSomeipProxy.cpp",
+    ],
+
+    header_libs: [
+        "camera_v1_0_common_headers",
+        "someip-hm_dvr_headers",
+        "someip-hm_idc1_5_headers",
+        "fdbus_headers",
+    ],
+
+    shared_libs:[
+        "libbase",
+        "libprotobuf-cpp-lite",
+        "libcommon-base",
+        "libdvr_vims",
+        "libsomeip_idc1_5"
+    ],
+
+    static_libs: [
+        "vendor.gwm.hardware.camera@1.0-libproto-fdbus-native",
+    ],
+
+    local_include_dirs: ["impl/include"],
+    export_include_dirs: ["impl/include"],
+
+    include_dirs: [
+        "external/protobuf/src",
+	],
+
+    cppflags: [
+        "-fexceptions"
+    ]
+}
+
+cc_binary {
+    name: "vendor.gwm.hardware.camera@1.0-service",
+    relative_install_path: "hw",
+    defaults: ["camera_defaults"],
+    init_rc: ["vendor.gwm.hardware.camera@1.0-service.rc"],
+    vendor: true,
+    rtti: false,
+    compile_multilib: "64",
+    srcs: [
+        "CameraService.cpp",
+    ],
+
+    header_libs: [
+        "camera_v1_0_common_headers",
+        "someip-hm_dvr_headers",
+        "someip-hm_idc1_5_headers",
+        "fdbus_headers",
+    ],
+
+    shared_libs:[
+        "libbase",
+        "libprotobuf-cpp-lite",
+        "libcommon-base",
+        "libdvr_vims",
+        "libsomeip_idc1_5"
+    ],
+
+    static_libs: [
+      "vendor.gwm.hardware.camera@1.0-impl-lib",
+      "vendor.gwm.hardware.camera@1.0-libproto-fdbus-native",
+
+    ],
+
+    include_dirs: [
+        "external/protobuf/src",
+	],
+
+    local_include_dirs: ["impl/include"],
+
+    cppflags: [
+        "-fexceptions"
+    ]
+}
+
+cc_binary {
+    name: "vendor.gwm.hardware.camera@1.0-client",
+    defaults: ["camera_defaults"],
+    init_rc: ["vendor.gwm.hardware.camera@1.0-service.rc"],
+    vendor: true,
+    rtti: false,
+    srcs: [
+        "tests/cameraclient/CameraClient.cpp",
+    ],
+
+    shared_libs: [
+        "vendor.gwm.hardware.camera@1.0",
+    ],
+
+    static_libs: [
+      "vendor.gwm.hardware.camera@1.0-impl-lib"
+    ],
+
+    local_include_dirs: ["impl/include"],
+
+    cppflags: [
+        "-fexceptions"
+    ]
+}
+
+// cc_test {
+//     name: "vendor.gwm.hardware.camera@1.0-service-unittest",
+//     defaults: ["camera_defaults"],
+//     vendor: true,
+//     srcs: [
+//         "tests/unittest/main.cpp",
+//         "tests/unittest/camera_gtest.cpp",
+//     ],
+
+//     header_libs: [
+//         "libbase_headers",
+//         "camera_v1_0_common_headers",
+//     ],
+
+//     static_libs: [
+//       "vendor.gwm.hardware.camera@1.0-libproto-fdbus-native",
+//       "vendor.gwm.hardware.camera@1.0-impl-lib",
+//     ],
+
+//     shared_libs: [
+//         "libbase",
+//         "libutils",
+//         "liblog",
+//         "libhidlbase",
+//         "libhidltransport",
+//         "libprotobuf-cpp-lite",
+//         "libcommon-base",
+//         "vendor.gwm.hardware.camera@1.0",
+//     ],
+
+//     test_suites: ["general-tests"],
+//     local_include_dirs: ["impl/include"],
+//     cppflags: [
+//         "-fexceptions"
+//     ]
+// }

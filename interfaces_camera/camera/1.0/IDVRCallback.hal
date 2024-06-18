@@ -1,0 +1,240 @@
+ /*************************************************************************
+ * Copyright (C) 2020-2023 GWM Automotive Inc.
+ *
+ * The copyright notice above does not evidence any actual
+ * or intended publication of such source code.
+ * The code contains GWM Confidential Proprietary Information.
+ *************************************************************************/
+package vendor.gwm.hardware.camera@1.0;
+
+import types;
+
+interface IDVRCallback {
+    /**
+     * @brief Notify file operation information to android.
+     * @param event, DVR File Operate file event
+     */
+    gwm_onDVRFileOperateNotify(GWM_FileOperateEvent event);
+
+    /**
+     * @brief Notify the dvr operate(capture, record) event to android.
+     * @param event, dvr camera operate event(video_type, cmd, cmd_action, action_status)
+     */
+    gwm_onVideoOperateEventNotify(GWM_DVRVideoOperateEvent event);
+
+    /**
+     * @brief Notify the DVR system status to android.
+     * @param status, the system status of the DVR function
+     */
+    gwm_onDVRSystemStatusNotify(GWM_DVR_SystemStatus status);
+
+    /**
+     * @brief Notify the DVR TF Card operation status to android.
+     * @param operation, tf card operation type
+     * @param tfcard_id, inner TF card or front TF card.
+     * @param status , success or failure.
+     */
+    gwm_onDVRTFCardOperateNotify(GWM_DVRTFCardOperateEvent event);
+
+    /**
+     * @brief DVR get parameter result callback to android.
+     * @param params, DVR config/parameter in QNX
+     */
+    gwm_onGetParameterNotify(GWM_DVRGetParam params);
+
+    /**
+     * @brief DVR set parameter result callback to android.
+     * @param set_params_reply, DVR set param reply from qnx
+     */
+    gwm_onSetParameterNotify(GWM_DVRSetParamReply set_params_reply);
+
+    /**
+     * @brief Notify preview real reply
+     * @param preview_reply, preview reply result(rtsp_addr and others) from dvr camera device
+     */
+    gwm_onDVRPreviewNotify(GWM_DVRPreviewReply preview_reply);
+
+    /**
+     * @brief Notify DVR recording Time
+     * @param time_info, record time info
+     */
+     gwm_onDVRRecordTimeNotify(GWM_DVRRecordTimeInfo time_info);
+
+    /**
+     * @brief Notify DVR reset factory result
+     * @param status, reset factory result
+     */
+     gwm_onDVRResetFactoryNotify(GWM_DVRReply reply_result);
+
+    /**
+     * @brief Notify DVR recording status
+     * @param record status
+     */
+     gwm_onDVRRecordStatusNotify(uint64_t record_status);
+
+    /**
+     * @brief Notify DVR Camera Changed status
+     * @param changed status
+     */
+     gwm_onDVRCameraStatusNotify(GWM_DVRCameraStatus camera_status);
+
+    /**
+     * @brief Notify DVR TFCard Changed status
+     * @param tfcard changed status
+     */
+     gwm_onDVRTFCardStatusNotify(GWM_DVRTFCardStatus tfcard_status);
+
+    /**
+     * @brief Notify DVR TFCard Capacity Changed status
+     * @param tfcard capacity changed status
+     */
+     gwm_onDVRTFCardCapacityNotify(GWM_DVRTFCardCapacityStatus capacity_status);
+
+    /**
+     * @brief Notify DVR TFCard Capacity cost Changed status
+     * @param tfcard capacity cost changed status
+     */
+     gwm_onDVRTFCardCapacityCostNotify(GWM_DVRTFCardCapacityCostStatus capacity_cost_status);
+
+     /**
+     * @brief dvr ipc status notify
+     * @param status,online or offline.
+     */
+     gwm_onDVRIPCStatusNotify(GWM_DVRIPCStatus status);
+
+     /**
+     * @brief dvr device status notify
+     * @param dvr changed status.
+     */
+     gwm_onDVRDeviceStatusNotify(GWM_DVRDeviceStatus device_status);
+
+    /**
+     * @brief dvr upload request status notify.qnx tell app receive the request.
+     * @param dvr GWM_DVRReply req_status.
+     */
+     gwm_onDVRReqUploadStatusNotify(GWM_DVRReply req_status);
+
+    /**
+     * @brief dvr upload file status.qnx tell app upload files info.
+     * @param GWM_DVRUploadFileStatus file_status.
+     */
+     gwm_onDVRUploadFileStatusNotify(GWM_DVRUploadFileStatus file_status);
+
+    /**
+     * @brief dvr broad cast actions status.qnx tell app actions info.
+     * @param  modules_names; GWM_DVRActModules  act_module;    GWM_DVRActCommand  act_cmd;dvr Upload File status;seqence.
+     */
+     gwm_onDVRBroadcastActionsStatusNotify(GWM_DVRBroadcastActionsResult act_result);
+
+    /**
+     * @brief dvr broad cast actions status.qnx tell app actions info.
+     * @param  modules_names; GWM_DVRActModules  act_module;    GWM_DVRActCommand  act_cmd;dvr Upload File status;seqence.
+     */
+     gwm_onDVRBroadcastEventsNotify(GWM_DVRModulesEventResult event_result);
+
+
+    //add for outside DVR
+    /**
+     * Add DVR status reporting interface: normal / abnormal
+     */
+    gwm_onDVRStatusNotify(GWM_DVRDeviceStatus dvr_status);
+
+    /**
+     * Add DVR event reporting interface: normal / abnormal
+     */
+    gwm_onDVREventReportNotify(GWM_DVREventReport dvr_event_status);
+
+    /**
+     * Add DVR operation reporting interface: normal / abnormal
+     */
+    gwm_onDVREventOperationNotify(GWM_DVROperationReport dvr_operation_status);
+
+
+    /**
+     * Add file list query and submission interface: query result
+     */
+    gwm_onDVRQueryFileListNotify(vec<GWM_DVRFileListResult> quest_result);
+
+    /**
+     * Add / delete status reporting interface: delete completed
+     */
+    gwm_onDVRFileStatusNotify(GWM_DVRFileOperateResult event_result);
+
+    /**
+     * Add file export progress report interface progress
+     */
+    gwm_onDVRFileExportProcessNotify(uint32_t export_status);
+
+    /**
+     * Add export completion status reporting interface: status: success, file does not exist, insufficient space
+     */
+    gwm_onDVRFileExportStatusNotify(GWM_DVRFileExportStatus export_status);
+
+    /**
+     * Add cancel export status reporting interface: success or failure
+     */
+    gwm_onDVRCancelFileExportStatusNotify(GWM_DVRFileOperateResult export_status);
+
+    /**
+     * Add EMMC status reporting interface:
+     * 1. EMMC storage status (emmcstatus)
+     * 2. EMMC capacity information (EMMC capacity), including total capacity, remaining capacity, unit: MB
+     */
+    gwm_onDVREMMCStatusNotify(GWM_DVREMMCReport emmc_status);
+
+    /**
+     * Recording status reporting interface
+     */
+    gwm_onDVRRecordStateNotify(GWM_DVRCameraId camera_id, GWM_DVRRecordStatus status, GWM_DVREventType type);
+
+    /**
+     * File capacity notify interface
+     */
+    gwm_onExportFileCapacityNotify(int32_t capacity, vec<string> file_path_url);
+
+    /**
+     * All file capacity notify interface
+     */
+    gwm_onAllFileCapacityNotify(int32_t capacity, GWM_DVRCameraId camera_id, GWM_DVRFileType file_type);
+
+    /**
+     * OMC capture status notify interface
+     */
+    gwm_onOMCCaptureStatusNotify(GWM_DVROMCCaptureStatus status, string eventTime, GWM_DVREventType eventType, uint32_t fileId, uint32_t fileSize);
+
+    /**
+     * OMC capture transfer status notify interface
+     */
+    gwm_onOMCCaptureTransferStatusNotify(GWM_DVROMCCaptureStatus status, string eventTime, GWM_DVREventType eventType, uint32_t fileId, uint32_t fileSize, string filePath);
+
+    /**
+     * DVR capture status notify interface
+     */
+    gwm_onDVRCaptureStatusNotify(GWM_DVROMCCaptureStatus status, string eventTime, GWM_DVREventType eventType, uint32_t fileId, uint32_t fileSize);
+
+    /**
+     * DVR capture transfer status notify interface
+     */
+    gwm_onDVRCaptureTransferStatusNotify(GWM_DVROMCCaptureStatus status, string eventTime, GWM_DVREventType eventType, uint32_t fileId, uint32_t fileSize, string filePath);
+
+    /**
+     * File delete progress report interface
+     */
+    gwm_onAsyncDeleteOperationProgressNotify(uint32_t delete_progress);
+
+    /**
+     * Cancel file delete status reporting interface
+     */
+    gwm_onDVRStopAsyncAllFileDeleteStatusNotify(GWM_DVRFileOperateResult delete_status);
+
+    /**
+     * File capacity info reporting interface
+     */
+    gwm_onDVRFileCapacityInfoNotify(vec<GWM_DVRFileCapacity> capacity_list);
+
+    /**
+     * File list include date reporting interface
+     */
+    gwm_onFileListIncludeDateNotify(vec<GWM_FileListIncludeDate> file_list);
+
+};

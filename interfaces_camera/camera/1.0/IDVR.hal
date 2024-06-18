@@ -1,0 +1,345 @@
+ /*************************************************************************
+ * Copyright (C) 2020-2023 GWM Automotive Inc.
+ *
+ * The copyright notice above does not evidence any actual
+ * or intended publication of such source code.
+ * The code contains GWM Confidential Proprietary Information.
+ *************************************************************************/
+
+package vendor.gwm.hardware.camera@1.0;
+
+import IDVRCallback;
+import types;
+
+/**
+ * Represents a automotive DVR camera interfaces.
+ */
+interface IDVR {
+    /**
+     * @brief register dvr callback for async notify 
+     * @param callback
+     * @return status,success or failure.
+     */
+    gwm_registerDVRCallback(IDVRCallback callback) generates (GWM_Status status);
+
+    /**
+     * @brief start preview with cameraId
+     * @param cameraId, DVR Camera ID.
+     * @return status,success or failure.
+     */
+    gwm_startPreview(GWM_DVRCameraId cameraId) generates (GWM_Status status);
+
+    /**
+     * @brief stop preview with cameraId
+     * @param cameraId, DVR Camera ID.
+     * @return status,success or failure.
+     */
+    gwm_stopPreview(GWM_DVRCameraId cameraId) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr record with cameraId and video record type
+     * @param cameraId, DVR Camera ID.
+     * @param type, video record type
+     * @return status,success or failure.
+     */
+    gwm_userStartRecord(GWM_DVRCameraId cameraId ,GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief stop dvr record with cameraId and video record type
+     * @param cameraId, DVR Camera ID.
+     * @param type, video record type
+     * @return status,success or failure.
+     */
+    gwm_userStopRecord(GWM_DVRCameraId cameraId,GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr capture with cameraId 
+     * @param cameraId, DVR Camera ID.
+     * @param type, dvr capture type(loop, short and etc)
+     * @return status, success or failure.
+     */
+    gwm_startCapture(GWM_DVRCameraId cameraId, GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr lapse video with cameraId
+     * @param cameraId, DVR Camera ID.
+     * @param timeLapseVideoInteval , time interval setting by application
+     * @return status
+     */
+    gwm_startLapseVideo(GWM_DVRCameraId cameraId, int64_t timeLapseVideoInteval, int16_t totalFrameNumber, int16_t playFrameNumber) generates (GWM_Status status);
+
+    /**
+     * @brief stop dvr lapse video with cameraId
+     * @param cameraId, DVR Camera ID.
+     * @return status,success or failure.
+     */
+    gwm_stopLapseVideo(GWM_DVRCameraId cameraId) generates (GWM_Status status);
+
+    /**
+     * @brief format tfcard with card id
+     * @param tfcard_id, TF Card Id
+     * @return status,success or failure.
+     */
+    gwm_formatTFCard(GWM_DVR_TFCardId tfcard_id) generates (GWM_Status status);
+
+    /**
+     * @brief query dvr system status 
+     * @return status,success or failure.
+     */
+    gwm_querySystemStatus() generates (GWM_Status status);
+
+    /**
+     * @brief Set DVR config/param to qnx from hal
+     * @param value, the value of DVR  params
+     * @return status ,success or failure.
+     */
+    gwm_setParam(GWM_DVRSetParam params) generates (GWM_Status status);
+
+    /**
+     * @brief Get DVR config/param from QNX 
+     * @return status,success or failure.
+     */
+    gwm_getParam() generates (GWM_Status status);
+
+    /**
+     * @brief Dvr reset factory operation
+     * @return status ,success or failure.
+     */
+    gwm_resetFactory() generates (GWM_Status status);
+
+    /**
+     * @brief dvr file operation
+     * @param operation, dvr file operation
+     * @return status,success or failure.
+     */
+    gwm_operateFile(GWM_DVR_FileOperateAction operation) generates (GWM_Status status);
+
+    /**
+     * @brief start upload Requset with GWM_DVRReply,app send request message to qnx,start upload process
+     * @return status,success or failure.
+     */
+    gwm_uploadRequset() generates (GWM_Status status);
+
+    /**
+     * @brief send upload Result preview with GWM_DVRUploadFileResult,tell qnx Upload result
+     * @param uploadResult.
+     * @return status,success or failure.
+     */
+    gwm_uploadResult(GWM_DVRUploadFileResult uploadResult) generates (GWM_Status status);
+    
+    /**
+     * @brief send actions with modules and cmd
+     * @param boardcastActions
+     * @return status,success or failure.
+     */
+    gwm_sendActCommd(GWM_DVRBroadcastActCommand boardcastActions) generates (GWM_Status status);
+
+        /**
+     * @brief send event with modules and event
+     * @param moduleEvent
+     * @return status,success or failure.
+     */
+    gwm_sendModuleEvent(GWM_DVRSendModuleEvent moduleEvent) generates (GWM_Status status);
+
+
+    //add for outside DVR
+    //Add file request interface: file type, cameraid, tfid, number of files, last file name
+    gwm_FileListRequest(GWM_DVRFileListREQ query_file_list) generates (GWM_Status status);
+
+    //Add file delete list interface: File URL list
+    gwm_deleteFileList(vec<string> file_path_url) generates (GWM_Status status);
+
+    /**
+     * @brief delete all files.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @param file_type, file type
+     * @return status,success or failure.
+     */
+    gwm_AllFiledelete(GWM_DVRCameraId camera_id, GWM_DVRFileType file_type) generates (GWM_Status status);
+
+    /**
+     * @brief delete all files asynchronously.
+     *
+     * @param cameraId, DVR Camera ID.
+     * @param file_type, file type
+     * @return status,success or failure.
+     */
+    gwm_AsyncAllFiledelete(GWM_DVRCameraId camera_id, GWM_DVRFileType file_type) generates (GWM_Status status);
+
+    /**
+     * @brief cancel delete all files.
+     *
+     * @param cameraId, DVR Camera ID.
+     * @return status,success or failure.
+     */
+    gwm_StopAsyncAllFiledelete(GWM_DVRCameraId camera_id) generates (GWM_Status status);
+
+    //Add file export interface export mode, file URL list
+    gwm_ExportFileList(GWM_DVRExportType export_type,vec<string> file_path_url) generates (GWM_Status status);
+
+    //Add all file export interfaces
+    gwm_AllFileExport(GWM_DVRExportType export_type,GWM_DVRCameraId camera_id, GWM_DVRFileType file_type) generates (GWM_Status status);
+
+    //Add and cancel export interface: sequence
+    gwm_CancelFilesExport(GWM_DVRCameraId camera_id) generates (GWM_Status status);
+
+    //Add an interface to obtain the file capacity information of all selected files
+    gwm_SelectAllFileCapacity(GWM_DVRCameraId camera_id, GWM_DVRFileType file_type) generates (GWM_Status status);
+
+    //Add a capacity acquisition interface to obtain the list of files to be exported
+    gwm_ExportFileCapacity(vec<string> file_path_url) generates (GWM_Status status);
+
+    //Add get get EMMC status information: file list
+    //1. The status information of EMMC returned in the response command: refer to [EMMC status report] for the value
+    //2. Return the capacity information of EMMC in the response command, including total capacity, remaining capacity, unit: MB.
+    gwm_EMMCStatusRequest() generates (GWM_Status status);
+
+    //Get tfcard status information: ID
+    gwm_TFCardStatusRequest(GWM_DVR_TFCardId tfcard_id) generates (GWM_Status status);
+
+    //Get TF card capacity
+    gwm_TFCardCapacityRequest(GWM_DVR_TFCardId tfcard_id) generates (GWM_Status status);
+
+    //Query recording status
+    gwm_RecordStateRequest(GWM_DVRCameraId camera_id) generates (GWM_Status status);
+
+    //Camera photographing request (eventtime format: yyyy-mm-dd HH: mm: SS)
+    gwm_OMCCaptureRequest(string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize) generates (GWM_Status status);
+
+    //The camera in the vehicle takes photos and sends the request. Eventtime format: yyyy-mm-dd HH: mm: SS
+    gwm_OMCCaptureTransferRequest(string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize, string filePath) generates (GWM_Status status);
+
+    //Camera photographing request for cux platform (eventtime format: yyyy-mm-dd HH: mm: SS)
+    gwm_DVRCaptureRequest(GWM_DVRCameraId camera_id, string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize) generates (GWM_Status status);
+
+    //The camera in the vehicle takes photos and sends the request for cux platform (eventtime format: yyyy-mm-dd HH: mm: SS)
+    gwm_DVRCaptureTransferRequest(GWM_DVRCameraId camera_id, string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize, string filePath) generates (GWM_Status status);
+
+    /**
+     * @brief dvr file capacity info request.
+     *
+     * @param file_capacity_type, dvr file capacity type.
+     * @param file_type_list, dvr file type list.
+     * @return status, success or failure.
+     */
+    gwm_DVRFileCapacityInfoReq(GWM_TFAllFileCapacity file_capacity_type, vec<GWM_ParamFileType> file_type_list) generates (GWM_Status status);
+
+    /**
+     * @brief dvr file list include date request.
+     *
+     * @param fileReq contains: file_type, camera_id, file_number, file_name.
+     * @return status, success or failure.
+     */
+    gwm_FileListIncludeDateReq(GWM_DVRFileIncludeDateREQ fileReq) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr record with cameraId and video record type.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @param type, video record type
+     * @return status,success or failure.
+     */
+    gwm_userStartRecord_sync(GWM_DVRCameraId cameraId ,GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief stop dvr record with cameraId and video record type.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @param type, video record type
+     * @return status,success or failure.
+     */
+    gwm_userStopRecord_sync(GWM_DVRCameraId cameraId,GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr capture with cameraId.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @param type, dvr capture type(loop, short and etc)
+     * @return status, success or failure.
+     */
+    gwm_startCapture_sync(GWM_DVRCameraId cameraId, GWM_DVR_VIDEO_TYPE type) generates (GWM_Status status);
+
+    /**
+     * @brief start dvr lapse video with cameraId.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @param timeLapseVideoInteval , time interval setting by application
+     * @return status
+     */
+    gwm_startLapseVideo_sync(GWM_DVRCameraId cameraId, int64_t timeLapseVideoInteval, int16_t totalFrameNumber, int16_t playFrameNumber) generates (GWM_Status status);
+
+    /**
+     * @brief stop dvr lapse video with cameraId.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param cameraId, DVR Camera ID.
+     * @return status,success or failure.
+     */
+    gwm_stopLapseVideo_sync(GWM_DVRCameraId cameraId) generates (GWM_Status status);
+
+    /**
+     * @brief Add an interface to obtain the file capacity information of all selected files: file list return value.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param camera_id, DVR Camera ID.
+     * @param file_type, file type.
+     * @return file_capacity, file capacity.
+     */
+    gwm_SelectAllFileCapacity_sync(GWM_DVRCameraId camera_id, GWM_DVRFileType file_type) generates (int32_t file_capacity);
+
+    /**
+     * @brief Add a capacity acquisition interface to obtain the list of files to be exported: return value of file list.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param file_path_url, file path url.
+     * @return file_capacity, file capacity.
+     */
+    gwm_ExportFileCapacity_sync(vec<string> file_path_url) generates (int32_t file_capacity);
+
+    /**
+     * @brief Camera photographing request (eventtime format: yyyy-mm-dd HH: mm: SS).
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param eventTime, event time.
+     * @param eventType, event type.
+     * @param fileId, file id.
+     * @param fileSize, file size.
+     * @return status, omc capture status.
+     */
+    gwm_OMCCaptureRequest_sync(string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize) generates (GWM_DVROMCCaptureStatus status);
+
+    /**
+     * @brief The camera in the vehicle takes photos and sends the request. Eventtime format: yyyy-mm-dd HH: mm: SS.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param eventTime, event time.
+     * @param eventType, event type.
+     * @param fileId, file id.
+     * @param fileSize, file size.
+     * @param filePath, file path.
+     * @return status, omc capture transfer status.
+     */
+    gwm_OMCCaptureTransferRequest_sync(string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize, string filePath) generates (GWM_DVROMCCaptureStatus status);
+
+    /**
+     * @brief DVR capture request (eventtime format: yyyy-mm-dd HH: mm: SS).
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param camera_id, camera id.
+     * @param eventTime, event time.
+     * @param eventType, event type.
+     * @param fileId, file id.
+     * @param fileSize, file size.
+     * @return status, dvr capture status.
+     */
+    gwm_DVRCaptureRequest_sync(GWM_DVRCameraId camera_id, string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize) generates (GWM_DVROMCCaptureStatus status);
+
+    /**
+     * @brief The camera in the vehicle takes dvr capture and sends the request. Eventtime format: yyyy-mm-dd HH: mm: SS.
+     *        this is a synchronous method, it carries the risk of being time-consuming.
+     * @param camera_id, camera id.
+     * @param eventTime, event time.
+     * @param eventType, event type.
+     * @param fileId, file id.
+     * @param fileSize, file size.
+     * @param filePath, file path.
+     * @return status, dvr capture transfer status.
+     */
+    gwm_DVRCaptureTransferRequest_sync(GWM_DVRCameraId camera_id, string eventTime, GWM_DVREventType eventType,uint32_t fileId,uint32_t fileSize, string filePath) generates (GWM_DVROMCCaptureStatus status);
+
+};

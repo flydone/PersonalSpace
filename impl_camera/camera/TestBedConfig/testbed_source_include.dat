@@ -1,0 +1,6 @@
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/impl/src/Camera.cpp
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/impl/src/DVR.cpp
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/impl/src/DVRCallback.cpp
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/impl/src/fdbus/CameraFdbClient.cpp
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/impl/src/fdbus/CameraFdbServer.cpp
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/camera/1.0/default/CameraService.cpp

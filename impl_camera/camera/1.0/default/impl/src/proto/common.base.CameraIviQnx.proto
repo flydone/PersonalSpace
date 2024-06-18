@@ -1,0 +1,630 @@
+
+syntax = "proto3";
+
+package CameraFdb;
+
+option optimize_for = LITE_RUNTIME;
+
+/* The flags that clients sends message or registers:
+ * clients invoke flags:
+ *            SEND_MESSAGE         : The flag that the client sends the message
+ * clients subscribe and onBroadcast flags:
+ *            BROADCAST_CAMERA : The client registers with the server and receives the broadcast flag
+ *            ...
+ */
+enum FdbCameraManagerMsgId
+{
+    DVR_FDB_ANDROID_MESSAGE                                 = 0x0000; //no used
+
+    /* android get qnx system infro */
+    DVR_FDB_ANDROID_GET_SYSTEM_INFRO                        = 0xF100; //system status TF infor   QNX通过 DVR_FDB_QNX_BROADCAST_SYSTEM_INFRO 广播系统状态
+    /* QNX 广播系统状态 */
+    DVR_FDB_QNX_BROADCAST_SYSTEM_INFRO                      = 0xF101; 
+    
+    
+    /* android 操作文件后通知QNX */
+    DVR_FDB_ANDROID_OPERATE_FILE                            = 0xF102; //QNX通过 reply接口返回message DVRFdbReplay
+    
+    
+    /* android 操作录相和拍照进程 */            
+    DVR_FDB_ANDROID_OPERATE_RECORD                          = 0xF103; //android 操作录相  拍照进程 ，  QNX通过 DVR_FDB_QNX_BROADCAST_OPERATE_RECORD_RESULT 广播操作结果
+    /* QNX 通过广播返回录相操作结果，和拍照操作结果 */            
+    DVR_FDB_QNX_BROADCAST_OPERATE_RECORD_RESULT             = 0xF104; 
+    
+    
+    /* android 操作SD卡 */
+    DVR_FDB_ANDROID_OPERATE_SDCARD                          = 0xF105; //sdcard operation  QNX通过 DVR_FDB_QNX_BROADCAST_OPERATE_SDCARD_RESULT 广播操作结果
+    /* QNX 广播 格式化SD卡的结果 */
+    DVR_FDB_QNX_BROADCAST_OPERATE_SDCARD_RESULT             = 0xF106; 
+    
+    
+    /* android SETUP SET */
+    DVR_FDB_ANDROID_SETUP_SET                               = 0xF107; //setparam   android 设置DVR参数，  QNX通过 DVR_FDB_QNX_BROADCAST_SETUP_SET_RESULT 广播操作结果
+    /* QNX 广播 参数设置的结果 */
+    DVR_FDB_QNX_BROADCAST_SETUP_SET_RESULT                  = 0xF108; //sdcard operation
+    
+    
+    /* android SETUP GET */
+    DVR_FDB_ANDROID_SETUP_GET                               = 0xF109; //getparam    android 获取DVR参数， QNX通过 DVR_FDB_ANDROID_SETUP_GET_RESULT 广播操作结果
+    /* QNX 广播  设置参数 */
+    DVR_FDB_ANDROID_SETUP_GET_RESULT                        = 0xF10A;
+    
+    /* QNX 广播文件操作 */
+    DVR_FDB_QNX_BROADCAST_OPERATE_FILE                      = 0xF10B;  //  QNX新增一个MP4文件或图片后report 安卓
+    
+    
+    /* ANDROID preview 操作*/
+    DVR_FDB_ANDROID_OPERATE_PREVIEW                         = 0xF10C;  //安卓操作preview        QNX通过 DVR_FDB_ANDROID_OPERATE_PREVIEW_RESULT 广播操作结果
+    DVR_FDB_ANDROID_OPERATE_PREVIEW_RESULT                  = 0xF10D;  //  
+    
+    /* ANDROID 恢复DVR的出厂设置参数*/
+    DVR_FDB_ANDROID_RESTORE_FACTORY_SETUP                   = 0xF10E;  //DVR APP点击恢复出厂设置，     QNX通过 DVR_FDB_QNX_BROADCAST_RESTORE_FACTORY_SETUP_RESULT 广播操作结果
+    /* QNX 广播 恢复出厂设置结果*/
+    DVR_FDB_QNX_BROADCAST_RESTORE_FACTORY_SETUP_RESULT      = 0xF10F;  //  
+
+    /* QNX 广播 录相时间*/
+    DVR_FDB_QNX_BROADCAST_RECORD_TIME                       = 0xF110;  //
+
+    /* QNX 广播   录相状态 */
+    DVR_FDB_QNX_BROADCAST_RECORD_STATUS                     = 0xF111; 
+
+    /* QNX 广播   TF卡状态改变 */
+    DVR_FDB_QNX_BROADCAST_TF_STATUS_CHANGED                 = 0xF112;
+
+    /* QNX 广播   摄像头状态改变 */
+    DVR_FDB_QNX_BROADCAST_CAMERA_STATUS_CHANGED             = 0xF113; 
+
+    /* QNX 广播 TF卡容量  状态改变 */
+    DVR_FDB_QNX_BROADCAST_TF_CAPACITY_STATUS_CHANGED        = 0xF114; 
+    
+    /* QNX 广播   TF卡各个分区使用值改变 */
+    DVR_FDB_QNX_BROADCAST_TF_CAPACITY_COST_CHANGED          = 0xF115; 
+
+    /* QNX 广播 设备状态改变 */
+    DVR_FDB_QNX_BROADCAST_DEVICE_STATUS_CHANGED        		= 0xF116; 
+
+    /* upload message */
+    DVR_FDB_ANDROID_UPLOAD_REQUEST                          = 0xF117;
+    DVR_FDB_QNX_UPLOAD_REQUEST_ACK                          = 0xF118; 
+    DVR_FDB_QNX_UPLOAD_ADD                                  = 0xF119; 
+    DVR_FDB_ANDROID_UPLOAD_RESEULT                          = 0xF120;
+    /*从ivi接收的someip信号*/
+    DVR_FDB_ANDROID_SOMEIP_SIGN                             = 0xF121;
+}
+
+enum DVRSDCardID {
+    DVR_SDCARD_ID_NULL                     = 0;
+    DVR_SDCARD_ID_FRONT                    = 1;
+    DVR_SDCARD_ID_INCAR                    = 2;
+    DVR_SDCARD_ID_ALL                      = 3;
+}
+
+enum DVRCameraID {
+    DVR_CAMERA_ID_NULL                     = 0;
+    DVR_CAMERA_ID_FRONT                    = 1;
+    DVR_CAMERA_ID_INCAR                    = 2;
+    DVR_CAMERA_ID_AVM                      = 3;
+    DVR_CAMERA_ID_FRONT_AND_AVM            = 4;
+    DVR_CAMERA_ID_ALL                      = 5;
+}
+
+enum DVRStatus {
+    DVR_STATUS_NULL                        = 0;
+    DVR_STATUS_NORMAL                      = 1;
+    DVR_STATUS_EXCEPTION                   = 2;
+	DVR_STATUS_NET_FAILURE 				   = 3;
+    DVR_STATUS_COMM_FAILURE				   = 4;
+    DVR_STATUS_CAN_SIGNAL_LOSS			   = 5;
+}
+
+
+
+enum DVRENABLEStatus {
+    DVR_ENABLE_STATUS_NULL                 = 0;
+    DVR_ENABLE_STATUS_ENABLE               = 1;
+    DVR_ENABLE_STATUS_DISABLE              = 2;
+}
+
+
+
+
+enum DVRREPLYStatus {
+    DVR_REPLY_STATUS_NULL                  = 0;
+    DVR_REPLY_STATUS_OK                    = 1;
+    DVR_REPLY_STATUS_ERROR                 = 2;
+}
+
+/*
+ *  DVR_FDB_ANDROID_GET_SYSTEM_INFRO
+ *  android端获取QNX端的系统信息，QNX端接收到这条消息后同步返回message DVRFdbReplay，然后异步通过广播DVR_FDB_QNX_BROADCAST_SYSTEM_INFRO返回系统信息  
+ *  
+ */
+/*
+ *  DVR_FDB_QNX_BROADCAST_SYSTEM_INFRO
+ *  QNX端广播系统信息
+ *  
+ */
+enum DVRUPLOADStatus {
+    DVR_UPLOAD_STATUS_NULL                        = 0;
+    DVR_UPLOAD_STATUS_OK                          = 1;
+    DVR_UPLOAD_STATUS_FAIL                        = 2;
+}
+enum DVRUPLOADType {
+    DVR_UPLOAD_NULL                     = 0;
+    DVR_UPLOAD_EMERGE                   = 1;
+    DVR_UPLOAD_MIAO_CALL                = 2;
+    DVR_UPLOAD_OTHER                    = 3;
+}
+message DVRFdbQNXBroadcastUploadFile
+{
+    string 	file_path                 = 1; 
+    DVRSDCardID sdcard_id   		  = 2;
+    DVRCameraID camera_id                 = 3;
+    DVRUPLOADType upload_type             = 4;
+    uint32    file_size                   = 5;
+    uint32    sequence                    = 6;                
+}
+message DVRFdbQNXBroadcastUploadResult
+{	
+	string 	           file_path             = 1; 
+	uint32             sequence              = 2;        
+	DVRUPLOADStatus    result                = 3;             
+}
+enum DVRSDCardStatus {
+    DVR_SYSTEMSTATUS_TFCARD_NULL           = 0;
+    DVR_SYSTEMSTATUS_TFCARD_NOT_EXIST      = 1;
+    DVR_SYSTEMSTATUS_TFCARD_EXCEPTION      = 2;
+    DVR_SYSTEMSTATUS_TFCARD_FULL           = 3;
+    DVR_SYSTEMSTATUS_TFCARD_WRITE_SLOW     = 4;
+    DVR_SYSTEMSTATUS_TFCARD_PLUGIN         = 5;
+}
+message DVRFdbReplay
+{
+    DVRREPLYStatus    reply_status         = 1;
+}
+
+enum DVRSDCardFormatType {
+    DVR_TF_TYPE_UNKOWN                     = 0;
+    DVR_TF_TYPE_FAT16                      = 1; //fat16
+    DVR_TF_TYPE_FAT32                      = 2; //fat32
+}
+
+enum DVRCAPACITYID {
+    DVR_CAPACITY_ID_NULL                   = 0;
+    DVR_CAPACITY_ID_LOOP                   = 1;        
+    DVR_CAPACITY_ID_EMERGENCY              = 2;
+    DVR_CAPACITY_ID_USER                   = 3;
+    DVR_CAPACITY_ID_MAX                    = 4;
+}
+
+enum DVRCapacityStatus {
+    DVR_CAPACITY_STATUS_UNKOWN             = 0;
+    DVR_CAPACITY_STATUS_NOT_FULL           = 1; //fat16
+    DVR_CAPACITY_STATUS_FULL               = 2; //fat32
+}
+
+message DVRFdbQnxSystemInfro{
+    DVRStatus device_status                                          =1;
+    
+	DVRStatus front_camera_status                                    =2;
+	DVRStatus incar_camera_status                                    =3;
+    DVRStatus avm_camera_status                                      =4;
+    
+	float tfcard_front_loop_capacity                                 =5;
+    float tfcard_front_emergency_capacity                            =6;
+    float tfcard_front_normal_capacity                               =7;
+    DVRCapacityStatus tfcard_front_loop_capacity_status              =8;
+    DVRCapacityStatus tfcard_front_emergency_capacity_status         =9;
+    DVRCapacityStatus tfcard_front_normal_capacity_status            =10;
+	
+    float tfcard_inner_loop_capacity                                 =11;
+    float tfcard_inner_emergency_capacity                            =12;
+    float tfcard_inner_normal_capacity                               =13;
+    DVRCapacityStatus tfcard_inner_loop_capacity_status              =14;
+    DVRCapacityStatus tfcard_inner_emergency_capacity_status         =15;
+    DVRCapacityStatus tfcard_inner_normal_capacity_status            =16;
+	
+	float tfcard_avm_loop_capacity                                   =17;
+    float tfcard_avm_emergency_capacity                              =18;
+    float tfcard_avm_normal_capacity                                 =19;
+    DVRCapacityStatus tfcard_avm_loop_capacity_status                =20;
+    DVRCapacityStatus tfcard_avm_emergency_capacity_status           =21;
+    DVRCapacityStatus tfcard_avm_normal_capacity_status              =22;
+	
+    string id                                                        =23;
+	
+	DVRSDCardStatus front_sdcard_status                              =24;
+    DVRSDCardStatus incar_sdcard_status                              =25;
+	
+	float tfcard_front_used_capacity                                 =26;
+    float tfcard_incar_used_capacity                                 =27;
+	
+    float tfcard_front_total_capacity                                =28;
+	float tfcard_inner_total_capacity                                =29;
+	
+	DVRSDCardFormatType tfcard_front_format_type                     =30;
+	DVRSDCardFormatType tfcard_inner_format_type                     =31;
+}
+
+/*
+ *  DVR_FDB_ANDROID_OPERATE_FILE
+ *  android端操作文件后通知QNX  ，QNX端接收到这条消息后同步返回message DVRFdbReplay
+ *  DVR_FDB_QNX_BROADCAST_OPERATE_FILE_REPLY
+ */
+enum DVRFileOperateType {
+    DVR_FILE_OPERATE_NULL                  = 0;
+    DVR_FILE_OPERATE_DEL                   = 1;
+    DVR_FILE_OPERATE_ADD                   = 2;
+    DVR_FILE_OPERATE_MOVE                  = 3;
+}
+message DVRFdbAndroidOperateFile
+{
+    DVRFileOperateType  operation_type     = 1;
+    DVRCameraID drv_id                     = 2;
+    DVRSDCardID sdcard_id                  = 3;
+    string src_file_name                   = 4; 
+    string dst_file_name                   = 5; 
+}
+
+/*
+ *  DVR_FDB_ANDROID_OPERATE_RECORD
+ *  android端操作DVR录相进程，QNX端接收到这条消息后同步返回message DVRFdbReplay，然后通过广播 DVR_FDB_QNX_BROADCAST_OPERATE_RECORD_RESULT 返回操作结果
+ *  
+ */
+enum DVRRecordOperateType {
+    DVR_RECORD_OPERATE_NULL                = 0;
+    DVR_RECORD_OPERATE_START               = 1;
+    DVR_RECORD_OPERATE_STOP                = 2;
+}
+enum DVRRecordOperateStage {
+    DVR_RECORD_OPERATE_STAGE_NULL          = 0;
+    DVR_RECORD_OPERATE_STAGE_BEGIN         = 1;
+    DVR_RECORD_OPERATE_STAGE_COMPLETE      = 2;
+}
+enum DVRVideoType {
+    DVR_VIDEO_TYPE_NULL                    = 0;                
+    DVR_VIDEO_TYPE_LOOP                    = 1;                //循环视频
+    DVR_VIDEO_TYPE_LONG                    = 2;                //长视频
+    DVR_VIDEO_TYPE_SHORT                   = 3;                //欢乐小视频
+    DVR_VIDEO_TYPE_TIME_LAPSE              = 4;                //缩时视频
+    DVR_VIDEO_TYPE_CAPTURE                 = 5;                //拍照
+    DVR_VIDEO_TYPE_CAPTURE_CONTITUE        = 6;                //多连拍照
+    DVR_VIDEO_TYPE_EMERGENCY               = 7;                //紧急录像
+    DVR_VIDEO_TYPE_GUARDIAN_MODE           = 8;                //守护模式，外置DVR专用
+}
+message DVRFdbDvrAndroidOperateRecord
+{
+    DVRRecordOperateType operation_type    = 1;
+    DVRCameraID drv_id                     = 2;
+    DVRSDCardID sdcard_id                  = 3;
+    DVRVideoType video_type                = 4; 
+}
+message DVRFdbAndroidOperateRecordBroadcastResult
+{
+    DVRRecordOperateType operation_type    = 1;
+    DVRCameraID drv_id                     = 2;
+    DVRSDCardID sdcard_id                  = 3;
+    DVRVideoType video_type                = 4; 
+    DVRREPLYStatus result                  = 5; 
+    DVRRecordOperateStage operation_stage  = 6;
+}
+
+/*
+ *  DVR_FDB_ANDROID_OPERATE_SDCARD
+ *  android端操作SD卡 QNX端接收到这条消息后同步返回message DVRFdbReplay，然后通过广播 DVR_FDB_QNX_BROADCAST_OPERATE_SDCARD_RESULT 返回操作结果
+ *  
+ */
+enum DVRSDCardOperateType {
+    DVR_SDCARD_OPERATE_NULL                = 0;
+    DVR_SDCARD_OPERATE_FORMATE             = 1;
+}
+
+message DVRFdbAndroidOperateSD
+{
+    DVRSDCardOperateType operation_type    = 1;
+    DVRSDCardID sdcard_id                  = 2;
+}
+message DVRFdbAndroidOperateSDBroadcastResult
+{
+    DVRSDCardOperateType operation_type    = 1;
+    DVRSDCardID sdcard_id                  = 2; 
+    DVRREPLYStatus result                  = 3; 
+}
+/*  DVR_FDB_ANDROID_SETUP_SET
+ *  android设置用户选项  QNX端接收到这条消息后同步返回message DVRFdbReplay，然后通过广播 DVR_FDB_QNX_BROADCAST_SETUP_SET_RESULT 返回操作结果
+ *  
+ */
+enum DVRSetupType {
+    DVR_SETUP_TEYPE_NULL                   = 0;
+    DVR_RECORD_OUTSIDE_SOUNDS              = 1;
+    DVR_TURN_ON_WIDE_DYNAMIC               = 2;
+    DVR_RECORD_TIME                        = 3;
+    DVR_DELAY_SHUTDOW                      = 4;
+    DVR_RECORD_AUTOMATICAL_OVERWRITE       = 5;
+    DVR_RECORD_SWITCH                      = 6;
+    DVR_PARKING_MONITORING                 = 7;
+    DVR_QUERY_TFCARD1_INFOR                = 8;
+    DVR_QUERY_TFCARD2_INFOR                = 9;
+    DVR_360_VIDEO_SWITCH                   = 10;
+    DVR_INCAR_CAMERA			   = 11;
+}
+message DVRFdbDvrAndroidSetupSet
+{
+    uint64          setup_bit_flag                                =1;                        
+                                                                        // bit 0  --DVR_RECORD_OUTSIDE_SOUNDS
+                                                                        // bit 1  --DVR_TURN_ON_WIDE_DYNAMIC
+    DVRENABLEStatus sounds_enable_status                          =2;
+    DVRENABLEStatus wide_dynamic_enable_status                    =3;
+    DVRENABLEStatus automatical_overwrite__enable_status          =4;
+    DVRENABLEStatus dvr_enable_status                             =5;
+    DVRENABLEStatus paking_monitoring_enable_status               =6;
+    DVRENABLEStatus avm_enable_status                             =7;
+    uint32 delay_shutdown                                         =8;                        //单位秒
+    uint32 record_time                                            =9;                        //单位秒
+    DVRENABLEStatus incar_camera_enable_status                    =10;
+}
+
+message DVRFdbDvrAndroidSetupSetQnxBroadcastResult
+{
+    uint64          setup_bit_flag                                =1;                        
+                                                                        // bit 0  --DVR_RECORD_OUTSIDE_SOUNDS
+                                                                        // bit 1  --DVR_TURN_ON_WIDE_DYNAMIC
+    DVRREPLYStatus sounds_enable_status                           =2;
+    DVRREPLYStatus wide_dynamic_enable_status                     =3;
+    DVRREPLYStatus automatical_overwrite__enable_status           =4;
+    DVRREPLYStatus dvr_enable_status                              =5;
+    DVRREPLYStatus paking_monitoring_enable_status                =6;
+    DVRREPLYStatus avm_enable_status                              =7;
+    DVRREPLYStatus delay_shutdown                                 =8;                        
+    DVRREPLYStatus record_time                                    =9;    
+    DVRREPLYStatus incar_camera_enable_status                     =10;
+}
+
+/* android SETUP GET 
+    DVR_FDB_ANDROID_SETUP_GET        // android获取用户选项.  QNX端接收到这条消息后同步返回message DVRFdbReplay，    广播返回message DVRFdbDvrAndroidSetupGetReply
+*/    
+
+
+message DVRFdbDvrAndroidSetupGetReply
+{
+    DVRENABLEStatus sounds_enable_status                    =1;
+    DVRENABLEStatus wide_dynamic_enable_status              =2;
+    DVRENABLEStatus automatical_overwrite__enable_status    =3;
+    DVRENABLEStatus dvr_enable_status                       =4;
+    DVRENABLEStatus paking_monitoring_enable_status         =5;
+    DVRENABLEStatus avm_enable_status                       =6;
+    uint32 delay_shutdown                                   =7;
+    uint32 record_time                                      =8;
+    DVRENABLEStatus incar_camera_enable_status              =9;
+}
+
+/* QNX 广播文件操作 
+    DVR_FDB_QNX_BROADCAST_OPERATE_FILE                  //  
+*/
+message DVRFdbQNXBroadcastOperateFile
+{
+    DVRFileOperateType  operation_type                 = 1;
+    DVRCameraID drv_id                                 = 2;
+    DVRSDCardID sdcard_id                              = 3;
+    string src_file_name                               = 4; 
+    string  dst_file_name                              = 5; 
+    DVRVideoType video_type                            = 6;
+}
+
+/* ANDROID preview 操作
+    DVR_FDB_ANDROID_OPERATE_PREVIEW                         ;  同步返回message DVRFdbReplay
+*/
+/*Preview*/
+enum DVRPreviewOperateType {
+    DVR_PREVIEW_OPERATE_NULL                    = 0;
+    DVR_PREVIEW_OPERATE_START                   = 1;
+    DVR_PREVIEW_OPERATE_STOP                    = 2;
+}
+message DVRFdbDvrAndroidOperatePreview
+{
+    DVRPreviewOperateType  operation_type       = 1;
+    DVRCameraID         drv_id                  = 2;
+}
+
+message DVRFdbDvrPreviewRtspInfo
+{
+    string                addr                   = 1;
+    DVRCameraID            drv_id                = 2;
+    DVRREPLYStatus        result                 = 3;
+    DVRPreviewOperateType  operation_type        = 4;
+}
+
+/* ANDROID 恢复DVR的出厂设置参数
+    DVR_FDB_ANDROID_RESTORE_FACTORY_SETUP                     ;  //      QNX端接收到这条消息后同步返回message DVRFdbReplay，然后通过广播 DVR_FDB_QNX_BROADCAST_RESTORE_FACTORY_SETUP_RESULT 返回操作结果
+QNX 广播 恢复出厂设置结果
+    DVR_FDB_QNX_BROADCAST_RESTORE_FACTORY_SETUP_RESULT        ;  // 
+*/    
+
+message DVRFdbAndroidRestoreFactorySetupBroadcastResult
+{
+    DVRREPLYStatus           result                 = 1;
+}
+
+/* QNX 广播 录相时间
+    DVR_FDB_QNX_BROADCAST_RECORD_TIME                         = 0xF110;  
+ bit 0:invalid     bit 1:valid */
+enum DVRRecordTime {
+    DVR_RECORD_TIME_NULL                             = 0x0000000000000000;     
+    DVR_RECORD_TIME_FRONT_LONG                       = 0x0000000000000001;
+    DVR_RECORD_TIME_FRONT_SHORT                      = 0x0000000000000002;
+    DVR_RECORD_TIME_FRONT_TIME_LAPSE                 = 0x0000000000000004;
+    DVR_RECORD_TIME_FRONT_EMERGENCY                  = 0x0000000000000008;
+    DVR_RECORD_TIME_INCAR_LONG                       = 0x0000000000000010;
+    DVR_RECORD_TIME_INCAR_SHORT                      = 0x0000000000000020;
+    DVR_RECORD_TIME_INCAR_TIME_LAPSE                 = 0x0000000000000040;
+    DVR_RECORD_TIME_INCAR_EMERGENCY                  = 0x0000000000000080;
+    DVR_RECORD_TIME_AVM_LONG                         = 0x0000000000000100;
+    DVR_RECORD_TIME_AVM_SHORT                        = 0x0000000000000200;
+    DVR_RECORD_TIME_AVM_EMERGENCY                    = 0x0000000000000400;
+}
+message DVRFdbAndroidRecordTime
+{
+    uint64          report_bit_flag                       =1;                        
+                                                                        // bit 0  --DVR_RECORD_TIME_FRONT_LONG
+                                                                        // bit 1  --DVR_RECORD_TIME_FRONT_SHORT
+                                                                        // bit 2  --DVR_RECORD_TIME_FRONT_TIME_LAPSE
+                                                                        // bit 3  --DVR_RECORD_TIME_FRONT_EMERGENCY
+                                                                        // bit 4  --DVR_RECORD_TIME_INCAR_LONG
+                                                                        // bit 5  --DVR_RECORD_TIME_INCAR_SHORT
+                                                                        // bit 6  --DVR_RECORD_TIME_INCAR_TIME_LAPSE
+                                                                        // bit 7  --DVR_RECORD_TIME_INCAR_EMERGENCY
+
+    uint32           front_long_recorded_time             = 2;
+    uint32           front_short_recorded_time            = 3;
+    uint32           front_time_lapse_recorded_time       = 4;
+    uint32           front_emergency_recorded_time        = 5;
+    uint32           incar_long_recorded_time             = 6;
+    uint32           incar_short_recorded_time            = 7;
+    uint32           incar_time_lapse_recorded_time       = 8;
+    uint32           incar_emergency_recorded_time        = 9;
+    uint32           avm_long_recorded_time               = 10;
+    uint32           avm_short_recorded_time              = 11;
+    uint32           avm_emergency_recorded_time          = 12;
+    
+}
+
+
+/* QNX 广播 录相状态
+    DVR_FDB_QNX_BROADCAST_RECORD_STATUS                       = 0xF111;  
+    bit 0:off     bit 1:on */
+enum DVRRecordStatus {
+    DVR_RECORD_STATUS_NULL                             = 0x0000000000000000;
+    DVR_RECORD_STATUS_FRONT_LOOP                       = 0x0000000000000001;        
+    DVR_RECORD_STATUS_FRONT_LONG                       = 0x0000000000000002;
+    DVR_RECORD_STATUS_FRONT_SHORT                      = 0x0000000000000004;
+    DVR_RECORD_STATUS_FRONT_TIME_LAPSE                 = 0x0000000000000008;
+    DVR_RECORD_STATUS_FRONT_CAPTURE                    = 0x0000000000000010;
+    DVR_RECORD_STATUS_FRONT_CAPTURE_CONTITUE           = 0x0000000000000020;
+    DVR_RECORD_STATUS_FRONT_EMERGENCY                  = 0x0000000000000040;
+    DVR_RECORD_STATUS_INCAR_LOOP                       = 0x0000000000000080;
+    DVR_RECORD_STATUS_INCAR_LONG                       = 0x0000000000000100;
+    DVR_RECORD_STATUS_INCAR_SHORT                      = 0x0000000000000200;
+    DVR_RECORD_STATUS_INCAR_TIME_LAPSE                 = 0x0000000000000400;
+    DVR_RECORD_STATUS_INCAR_CAPTURE                    = 0x0000000000000800;
+    DVR_RECORD_STATUS_INCAR_CAPTURE_CONTITUE           = 0x0000000000001000;
+    DVR_RECORD_STATUS_INCAR_EMERGENCY                  = 0x0000000000002000;
+	DVR_RECORD_STATUS_AVM_LOOP                         = 0x0000000000004000;
+    DVR_RECORD_STATUS_AVM_LONG                         = 0x0000000000008000;
+    DVR_RECORD_STATUS_AVM_SHORT                        = 0x0000000000010000;
+    DVR_RECORD_STATUS_AVM_CAPTURE                      = 0x0000000000020000;
+    DVR_RECORD_STATUS_AVM_CAPTURE_CONTITUE             = 0x0000000000040000;
+    DVR_RECORD_STATUS_AVM_EMERGENCY                    = 0x0000000000080000;
+}
+
+/*紧急录制触发种类(SOMEIP透传)*/
+enum DVREventRecordTriggerType{
+	TRI_NONE = 0;  // 未知触发
+	TRI_DIAGNOSIS = 1;  // 故障触发
+	TRI_DIAGNOSIS_HARDWARE = 2;  // 软件故障触发
+	TRI_DIAGNOSIS_SOFTWARE = 3;  // 硬件故障触发
+	TRI_DIAGNOSIS_NETWORK = 4;  // 网络故障触发
+	TRI_ACCIDENT = 5;  // 事故触发
+	TRI_REMOTE = 6; // 接管触发
+	TRI_EBRAKE = 7; // 急刹触发
+	TRI_PBRAKE = 8; // 点刹触发
+	TRI_BLOCK = 9; // 阻塞触发
+	TRI_AEB = 10; // AEB触发
+	TRI_SAFESTOP = 11; // safestop触发
+	TRI_SMART_DODGE = 12; // 智能躲闪触发ELK
+	TRI_ELK = 13; // ELK触发
+	TRI_ESS = 14; // ESS触发
+	TRI_SHARP_TURN = 15; // 急转弯触发
+	TRI_CHANGE_LANE = 16; // 换道触发
+	TRI_URGENT_ACCELERATE = 17; // 急加速触发
+	TRI_HMI = 18; // HMI操作触发
+	TRI_CAMERA_BUMPY = 19; // 相机出现上下颠簸触发
+	TRI_ROAD_UNDULATION = 20; // 道路起伏场景，道路起伏触发
+	TRI_FISHBONE_LINE = 21;   // 鱼骨线场景触发
+	TRI_NO_LANE_LINE  = 22;   // 无车道线触发 
+	TRI_SPECIAL_ROAD = 23;   //特殊道路场景
+	TRI_SPECIAL_WEATHER_SCENE = 24;   //特殊天气场景
+	TRI_LANE_LINE_COVERED = 25;   //车道线被遮挡场景
+	TRI_ANIMAL = 26;           //动物、家禽等特殊动物出现的场景
+	TRI_GENERAL_OBSTACLE = 27;    //一般障碍物
+	TRI_MINI_CAR = 28;    //微型汽车场景，例如知豆，欧拉等
+	TRI_LARGE_TRUCK = 29;    //微型汽车场景，例如知豆，欧拉等
+	TRI_RAMP = 30;           //上下匝道
+	TRI_ADAS_OPEN = 31;           //ADAS功能开启触发
+	TRI_CHANGE_LANE_CANCELED = 32; //变道功能取消触发
+	TRI_ADAS_CLOSE = 33;           //ADAS功能关闭触发
+	TRI_INTERVENE  = 34;           //介入触发
+	TRI_TRAFFIC_JAM  = 35;         //拥堵场景触发
+	TRI_ME_FAILSAFE  = 36;         //ME FailSafe场景
+	TRI_CHANGE_LANE_FAILURE = 37;           //变道失败触发
+	TRI_CUSTOM = 100; // 自定义触发
+}
+message DVRFdbAndroidRecordStatus
+{    
+     uint64        record_status                       =1; 
+}
+
+
+
+/* QNX 广播   TF卡状态改变 
+    DVR_FDB_QNX_BROADCAST_TF_STATUS_CHANGED                 = 0xF112; */
+
+message DVRFdbAndroidTFStatus
+{    
+     DVRSDCardID sdcard_id                  			= 1;
+     DVRSDCardStatus sdcard_status          			= 2;
+}
+ 
+
+/* QNX 广播   摄像头状态改变 
+    DVR_FDB_QNX_BROADCAST_CAMERA_STATUS_CHANGED             = 0xF113; */
+message DVRFdbAndroidCameraStatus
+{    
+     DVRCameraID         camera_id                 		= 1;
+     DVRStatus      camera_status                  		= 2;
+}
+
+
+/* QNX 广播 TF卡容量状态改变 
+    DVR_FDB_QNX_BROADCAST_TF_CAPACITY_STATUS_CHANGED        = 0xF114; */
+message DVRFdbAndroidTFCapacityStatusChanged
+{    
+     DVRSDCardID sdcard_id                  			= 1;
+     DVRCameraID camera_id                  			= 2;
+     DVRCAPACITYID   capacity_id                   		= 3;
+     DVRCapacityStatus capacity_status                 	= 4;
+}
+    
+
+    
+/* QNX 广播   TF卡各个分区使用值改变 
+DVR_FDB_QNX_BROADCAST_TF_CAPACITY_COST_CHANGED          = 0xF115; */
+message DVRFdbAndroidTFCapacityCostChanged
+{    
+     DVRCameraID camera_id                  			= 1;
+     float  loop_capacity                             	= 2;
+     float emergency_capacity                          	= 3;
+     float  user_capacity                            	= 4;  
+     DVRSDCardID sdcard_id                  			= 5;
+     float total_capacity                              	= 6;
+     float used_capacity                               	= 7;
+     DVRSDCardFormatType card_format_type                  = 8;
+}
+    
+
+/* QNX 广播   设备状态改变 
+    DVR_FDB_QNX_BROADCAST_DEVICE_STATUS_CHANGED             = 0xF116; */
+message DVRFdbAndroidDeviceStatus
+{    
+    DVRStatus device_status                                          =1;
+}
+
+/*DVR*/
+message DVREventRecordDataCollectTrigger
+{
+    uint64 sys_time_us = 1; // 触发的时间，UNIX时间戳
+    uint64 collect_before_time = 2; //单位秒，触发采集多少秒之前数据
+    uint64 collect_after_time = 3;  //单位秒，触发采集多少秒之后数据
+    repeated uint64 parameter = 4; //透传的参数，以备后续拓展
+    DVREventRecordTriggerType trigger_type = 5; // 触发的父类型，分为事故触发、异常触发等
+    DVREventRecordTriggerType trigger_subtype = 6; // 触发的子类型，比如硬件故障、软件故障
+}

@@ -1,0 +1,751 @@
+ /*************************************************************************
+ * Copyright (C) 2020-2023 GWM Automotive Inc.
+ *
+ * The copyright notice above does not evidence any actual
+ * or intended publication of such source code.
+ * The code contains GWM Confidential Proprietary Information.
+ *************************************************************************/
+
+package vendor.gwm.hardware.camera@1.0;
+
+enum GWM_Status : int32_t {
+    GWM_UNKOWN              = 0,
+    GWM_OK                  = 1,
+    GWM_ERROR               = 2,
+};
+
+/**
+  * DVR information
+  */
+enum GWM_DVRCameraId : uint16_t {
+    GWM_DVR_CAMERA_ID_NULL  = 0,
+    GWM_DVR_CAMERA_ID_FRONT = 1,           //Front DVR Camera
+    GWM_DVR_CAMERA_ID_INCAR = 2,           //INCAR DVR Camera
+    GWM_DVR_CAMERA_ID_AVM   = 3,           //AVM Camera
+    GWM_DVR_CAMERA_ID_FRONT_AND_AVM =4,    //Front and AVM Camera
+    GWM_DVR_CAMERA_ID_ALL   = 5,           //ALL
+    GWM_DVR_StreamingMedia_or_BackSignt_reserved   = 6,  //后视（预留）
+    GWM_DVR_MultiChannel   = 7,
+    GWM_DVR_WithinSignt_DMC   = 8,
+};
+
+/**
+ * The action's status of the Capture/Video.
+ */
+enum GWM_DVR_CMD_ACTION : uint8_t {
+    GWM_DVR_CMD_ACTION_UNKOWN    = 0,
+    GWM_DVR_CMD_ACTION_BEGIN     = 1,
+    GWM_DVR_CMD_ACTION_COMPLETE  = 2,
+};
+
+/**
+ * Capture and video type
+ */
+enum GWM_DVR_VIDEO_TYPE : uint8_t {
+    GWM_DVR_VIDEO_TYPE_NULL    = 0,
+    GWM_DVR_VIDEO_TYPE_LOOP    = 1,         //loop video
+    GWM_DVR_VIDEO_TYPE_LONG     = 2,
+    GWM_DVR_VIDEO_TYPE_SHORT    = 3,
+    GWM_DVR_VIDEO_TIME_LAPSE    = 4,
+    GWM_DVR_CAPTURE            = 5,
+    GWM_DVR_CAPTURE_CONTINUOUS = 6,
+    DVR_VIDEO_TYPE_EMERGENCY   = 7,         //video emergency
+    GWM_DVR_VIDEO_TYPE_GUARDIANMODE = 8,    //guardian mode, only for ext dvr
+    GWM_DVR_CAPTURE_FINDCAR = 9,            //find car, only for ext dvr
+};
+
+enum GWM_DVR_SETUP_TYPE : uint64_t {
+    GWM_DVR_SETUP_TEYPE_NULL             = 0,
+    GWM_DVR_RECORD_OUTSIDE_SOUNDS        = (1<<0),  // Set the recording of out-of-car sounds, the type of bool
+    GWM_DVR_TURN_ON_WIDE_DYNAMIC         = (1<<1),  // Whether to turn on the wide dynamic setting.
+    GWM_DVR_RECORD_TIME                  = (1<<2),  // The duration of the recording.
+    GWM_DVR_DELAY_SHUTDOW                = (1<<3),  // Delayed shutdown.
+    GWM_DVR_RECORD_AUTOMATICAL_OVERWRITE = (1<<4),  // Whether to run the event recording is automatically overwritten.
+    GWM_DVR_RECORD_SWITCH                = (1<<5),  // The switch on and off the DVR function.
+    GWM_DVR_PARKING_MONITORING           = (1<<6),  // Parking monitoring.
+    GWM_DVR_QUERY_TFCARD1_INFOR          = (1<<7),  // query front TF card information. Only for built-in dvr.
+    GWM_DVR_QUERY_TFCARD2_INFOR          = (1<<8),  // query inner TF card information. Only for built-in dvr.
+    GWM_DVR_360_VIDEO_SWITCH             = (1<<9),  // The switch of 360 video.
+    GWM_DVR_INCAR_VIDEO_SWITCH           = (1<<10), // DVR INCAR Video Switch.
+    GWM_DVR_SET_OSD_INFO_SWITCH          = (1<<11), // SET OSD INFO SWITCH.
+};
+
+/**
+ * The parameter of DVR function common request
+ */
+enum GWM_DVRRequest: uint8_t {
+    GWM_DVR_NULL_REQUEST          = 0,
+    GWM_DVR_ENABLE_REQUEST        = 1,
+    GWM_DVR_DISABLE_REQUEST       = 2,
+    /* TBD: reserved DVR request */
+};
+
+/**
+ * The parameter of DVR function common fdbus reply
+ * after request to QNX
+ */
+enum GWM_DVRReply : uint8_t {
+    GWM_DVR_REPLY_NULL   = 0,
+    GWM_DVR_REPLY_OK     = 1,
+    GWM_DVR_REPLY_ERROR  = 2,
+};
+
+/**
+ * The parameter of DVR function common reported real status in QNX
+ */
+enum GWM_DVRStatus: uint8_t {
+    GWM_DVR_STATUS_NULL    = 0,
+    GWM_DVR_STATUS_ENABLE  = 1,
+    GWM_DVR_STATUS_DISABLE = 2,
+};
+
+/**
+ * The parameter of DVR function common reported real device status in QNX
+ */
+enum GWM_DVRDeviceStatus: uint8_t {
+    DVR_STATUS_NULL                        = 0,
+    DVR_STATUS_NORMAL                      = 1,
+    DVR_STATUS_EXCEPTION                   = 2,
+    DVR_STATUS_NET_FAILURE                 = 3,
+    DVR_STATUS_COMM_FAILURE                = 4,
+    DVR_STATUS_CAN_SIGNAL_LOSS             = 5,
+};
+
+/**
+ * DVR Video operation type
+ */
+enum GWM_DVRVideoOperateType : uint8_t {
+   GWM_DVR_VIDEO_OPERATE_NULL  = 0,
+   GWM_DVR_VIDEO_OPERATE_START = 1, /* dvr video record/capture start */
+   GWM_DVR_VIDEO_OPERATE_STOP  = 2, /* dvr video record/capture stop */
+};
+
+/**
+ * The parameter of DVR capacity status
+ */
+enum GWM_DVRCapacityStatus: uint8_t {
+    GWM_DVR_CAPACITY_STATUS_UNKNOWN  = 0,
+    GWM_DVR_CAPACITY_STATUS_NOT_FULL = 1,
+    GWM_DVR_CAPACITY_STATUS_FULL     = 2,
+};
+
+/**
+ * The parameter of DVR upload request type in QNX
+ */
+enum GWM_DVRUploadType: uint8_t {
+    GWM_DVR_UPLOAD_NULL         = 0,
+    GWM_DVR_UPLOAD_EMERGE       = 1,
+    GWM_DVR_UPLOAD_MIAO_CALL    = 2,
+    GWM_DVR_UPLOAD_OTHER        = 3,
+};
+/**
+ * The parameter of DVR upload request status in QNX
+ */
+enum GWM_DVRUploadStatus: uint8_t {
+    GWM_DVR_STATUS_NULL    = 0,
+    GWM_DVR_STATUS_OK   = 1,
+    GWM_DVR_STATUS_FAIL  = 2,
+};
+
+/**
+ *  Setting parameter by application
+ */
+struct GWM_DVRSetParam {
+    GWM_DVRCameraId    camera_id;
+    uint64_t           setup_bit_flag;
+    GWM_DVRRequest     sounds_enable_req;
+    GWM_DVRRequest     wide_dynamic_enable_req;
+    GWM_DVRRequest     automatical_overwrite__enable_req;
+    GWM_DVRRequest     dvr_enable_req;
+    GWM_DVRRequest     paking_monitoring_enable_req;
+    GWM_DVRRequest     avm_enable_req;
+    uint32_t           delay_shutdown_req;
+    uint32_t           record_time_req;
+    GWM_DVRRequest     incar_camera_enable_req;
+    GWM_DVRRequest     set_osd_info_req;
+};
+
+/**
+ *  Reply for setting parameter.
+ * Setting parameter use async API. It need to notify application
+ */
+struct GWM_DVRSetParamReply{
+    uint64_t       set_bit_flag; /* refer to GWM_DVR_SETUP_TYPE */
+    GWM_DVRReply   sounds_enable_reply;
+    GWM_DVRReply   wide_dynamic_enable_reply;
+    GWM_DVRReply   automatical_overwrite__enable_reply;
+    GWM_DVRReply   dvr_enable_reply;
+    GWM_DVRReply   paking_monitoring_enable_reply;
+    GWM_DVRReply   avm_enable_reply;
+    GWM_DVRReply   delay_shutdown_reply;
+    GWM_DVRReply   record_time_reply;
+    GWM_DVRReply   incar_camera_enable_reply;
+    GWM_DVRReply   set_osd_info_reply;
+};
+
+/**
+ *  DVRTFCardInformation from HAL
+ */
+struct GWM_DVRTFCardInfor {
+    float           tfcard_total_capacity;
+    float           tfcard_loop_capacity;
+    float           tfcard_emergency_capacity;
+    float           tfcard_normal_capacity;
+    GWM_DVR_TFType  tfcard_format_type;
+    float           tfcard_used_capacity;
+    float           total_export_capacity;
+    float           free_export_capacity;
+    GWM_DVRCapacityStatus tfcard_loop_capacity_status;
+    GWM_DVRCapacityStatus tfcard_emergency_capacity_status;
+    GWM_DVRCapacityStatus tfcard_normal_capacity_status;
+};
+
+/**
+ *  Reply for getting parameter, real status in QNX
+ *  getting parameter use async API. It need to notify application
+ */
+struct GWM_DVRGetParam {
+    GWM_DVRStatus   sounds_enable_status;
+    GWM_DVRStatus   wide_dynamic_enable_status;
+    GWM_DVRStatus   automatical_overwrite__enable_status;
+    GWM_DVRStatus   dvr_enable_status;
+    GWM_DVRStatus   paking_monitoring_enable_status;
+    GWM_DVRStatus   avm_enable_status;
+    uint32_t        delay_shutdown; /* current cfg in QNX */
+    uint32_t        record_time;    /* current record time cfg in QNX */
+    GWM_DVRStatus   incar_camera_enable_status;
+    GWM_DVRStatus   set_osd_info_status;
+};
+
+/**
+ * Notify DVR operate event to application
+ */
+struct GWM_DVRVideoOperateEvent {
+    GWM_DVR_CMD_ACTION  cmd_action;
+    GWM_DVRVideoOperateType operation_type;
+    GWM_DVRCameraId     camera_id;
+    GWM_DVR_TFCardId    tfcard_id;
+    GWM_DVR_VIDEO_TYPE  video_type;  // video type ,capture or video
+    GWM_DVRReply        reply_result;// operate result
+};
+
+/**
+ * The action of DVR function file.
+ */
+enum GWM_DVR_FileOperateType : uint8_t {
+    GWM_DVR_FILE_NULL   = 0,
+    GWM_DVR_FILE_DELETE = 1,
+    GWM_DVR_FILE_ADD    = 2,
+    GWM_DVR_FILE_MOVE   = 3,
+};
+
+/**
+ * The DVR file operate action
+ */
+struct GWM_DVR_FileOperateAction{
+    GWM_DVR_FileOperateType operation_type;
+    GWM_DVRCameraId camera_id;
+    GWM_DVR_TFCardId tfcard_id;
+    string src_file_name;
+    string dst_file_name;
+};
+
+/**
+ * The DVR file operate event
+ */
+struct GWM_FileOperateEvent{
+    GWM_DVR_FileOperateType operation_type;
+    GWM_DVRCameraId camera_id;
+    GWM_DVR_TFCardId tfcard_id;
+    string src_file_name;
+    string dst_file_name;
+    GWM_DVR_VIDEO_TYPE video_type;
+};
+
+/**
+ * The status of TFCard
+ */
+enum GWM_DVR_TFCardStatus : uint8_t {
+    GWM_DVR_TFCARD_NULL        = 0,
+    GWM_DVR_TFCARD_NOT_EXIST   = 1,
+    GWM_DVR_TFCARD_EXCEPTION   = 2,
+    GWM_DVR_TFCARD_FULL        = 3,
+    GWM_DVR_TFCARD_WRITE_SLOW  = 4,
+    GWM_DVR_TFCARD_PLUGIN      = 5,
+	GWM_DVR_TFCARD_Capacity_Not_Supported   = 6,
+	GWM_DVR_TFCARD_Emergency_Space_Full = 7,
+};
+
+
+/**
+ * The status of DVR function
+ */
+enum GWM_DVRSystemStatus : uint8_t {
+    GWM_DVR_SYSTEM_STATUS_NULL  = 0,
+    GWM_DVR_SYSTEM_NORMAL       = 1,
+    GWM_DVR_SYSTEM_EXCEPTION    = 2,
+    GWM_DVR_SYSTEM_NET_FAILURE  = 3,
+    GWM_DVR_SYSTEM_COMM_FAILURE = 4,
+    GWM_DVR_SYSTEM_CAN_SIGNAL_LOSS = 5,
+    GWM_DVR_SYSTEM_SENSOR_INIT = 6,
+};
+
+/**
+ * record status ,bit 0:off
+ */
+enum GWM_DVR_RecordStatus: uint64_t {
+    GWM_DVR_RECORD_STATUS_NULL                      = 0,
+    GWM_DVR_RECORD_STATUS_FRONT_LOOP                = 1<<0,
+    GWM_DVR_RECORD_STATUS_FRONT_LONG                = 1<<1,
+    GWM_DVR_RECORD_STATUS_FRONT_SHORT               = 1<<2,
+    GWM_DVR_RECORD_STATUS_FRONT_TIME_LAPSE          = 1<<3,
+    GWM_DVR_RECORD_STATUS_FRONT_CAPTURE             = 1<<4,
+    GWM_DVR_RECORD_STATUS_FRONT_CAPTURE_CONTITUE    = 1<<5,
+    GWM_DVR_RECORD_STATUS_FRONT_EMERGENCY           = 1<<6,
+    GWM_DVR_RECORD_STATUS_INCAR_LOOP                = 1<<7,
+    GWM_DVR_RECORD_STATUS_INCAR_LONG                = 1<<8,
+    GWM_DVR_RECORD_STATUS_INCAR_SHORT               = 1<<9,
+    GWM_DVR_RECORD_STATUS_INCAR_TIME_LAPSE          = 1<<10,
+    GWM_DVR_RECORD_STATUS_INCAR_CAPTURE             = 1<<11,
+    GWM_DVR_RECORD_STATUS_INCAR_CAPTURE_CONTITUE    = 1<<12,
+    GWM_DVR_RECORD_STATUS_INCAR_EMERGENCY           = 1<<13,
+    GWM_DVR_RECORD_STATUS_AVM_LOOP                  = 1<<14,
+    GWM_DVR_RECORD_STATUS_AVM_LONG                  = 1<<15,
+    GWM_DVR_RECORD_STATUS_AVM_SHORT                 = 1<<16,
+    GWM_DVR_RECORD_STATUS_AVM_CAPTURE               = 1<<17,
+    GWM_DVR_RECORD_STATUS_AVM_CAPTURE_CONTITUE      = 1<<18,
+    GWM_DVR_RECORD_STATUS_AVM_EMERGENCY             = 1<<19,
+};
+
+/**
+ * The status of the DVR system.
+ */
+struct GWM_DVR_SystemStatus {
+    GWM_DVRSystemStatus     device_status;
+    GWM_DVR_TFCardStatus    front_sdcard_status;
+    GWM_DVRSystemStatus     front_camera_status;
+    GWM_DVRSystemStatus     avm_camera_status;
+    GWM_DVR_TFCardStatus    incar_sdcard_status;
+    GWM_DVRSystemStatus     incar_camera_status;
+    GWM_DVRTFCardInfor      front_infor;
+    GWM_DVRTFCardInfor      inner_infor;
+    GWM_DVRTFCardInfor      avm_infor;
+};
+
+/**
+ * The type of TFCard
+ */
+enum GWM_DVR_TFType : uint8_t {
+    DVR_TF_TYPE_UNKOWN    = 0,
+    GWM_DVR_TF_TYPE_FAT16 = 1 , //fat16
+    GWM_DVR_TF_TYPE_FAT32 = 2 , //fat32
+};
+
+/**
+ * The type of TFCard Operation
+ */
+enum GWM_DVR_TFCardOperateType : uint8_t {
+    GWM_DVR_TFCARD_OPERATE_NULL   = 0,
+    GWM_DVR_TFCARD_OPERATE_FORMAT = 1,
+};
+
+enum GWM_DVR_CaptureType : uint8_t {
+    GWM_DVR_CAPTURE_TYPE_UNKOWN     = 0,
+    GWM_DVR_CAPTURE_TYPE_SIGLE      = 1, /* Capture one picture*/
+    GWM_DVR_CAPTURE_TYPE_CONTINUOUS = 2, /* Capture three pictures for one time*/
+};
+
+enum GWM_DVR_TFCardId: uint8_t {
+    GWM_DVR_TFCARD_NULL   = 0,
+    GWM_DVR_TFCARD_FRONT  = 1,/*represent front TF card*/
+    GWM_DVR_TFCARD_INCAR  = 2,/*represent inner TF card*/
+    GWM_DVR_TFCARD_ALL    = 3,
+};
+
+/**
+ * record time type
+ * bit 0:invalid     bit 1:valid
+ */
+enum GWM_DVR_RecordTimeType: uint64_t {
+    GWM_DVR_RECORD_TIME_NULL              = 0,
+    GWM_DVR_RECORD_TIME_FRONT_LONG        = 1<<0,
+    GWM_DVR_RECORD_TIME_FRONT_SHORT       = 1<<1,
+    GWM_DVR_RECORD_TIME_FRONT_TIME_LAPSE  = 1<<2,
+    GWM_DVR_RECORD_TIME_FRONT_EMERGENCY   = 1<<3,
+    GWM_DVR_RECORD_TIME_INCAR_LONG        = 1<<4,
+    GWM_DVR_RECORD_TIME_INCAR_SHORT       = 1<<5,
+    GWM_DVR_RECORD_TIME_INCAR_TIME_LAPSE  = 1<<6,
+    GWM_DVR_RECORD_TIME_INCAR_EMERGENCY   = 1<<7,
+    GWM_DVR_RECORD_TIME_AVM_LONG          = 1<<8,
+    GWM_DVR_RECORD_TIME_AVM_SHORT         = 1<<9,
+    GWM_DVR_RECORD_TIME_AVM_EMERGENCY     = 1<<10,
+};
+
+/**
+ *
+ * DVR Camera Capacity id
+ */
+enum GWM_DVRCapacityId: uint64_t {
+    GWM_DVR_CAPACITY_ID_NULL  = 0,
+    GWM_DVR_CAPACITY_ID_LOOP  = 1,
+    GWM_DVR_CAPACITY_ID_EMERGENCY  = 2,
+    GWM_DVR_CAPACITY_ID_USER = 3,
+    GWM_DVR_CAPACITY_ID_MAX = 4,
+};
+
+/**
+ *
+ * notify DVR IPC status
+ */
+enum GWM_DVRIPCStatus: uint8_t {
+    GWM_DVR_IPC_OFFLINE   = 0,
+    GWM_DVR_IPC_ONLINE    = 1,
+};
+
+/**
+ *  DVR preview reply result
+ */
+struct GWM_DVRPreviewReply {
+    string          rtsp_addr;
+    GWM_DVRCameraId cameraId;
+    GWM_DVRReply    preview_result;
+    GWM_DVRVideoOperateType operation_type;
+};
+
+/**
+ *  notify DVR record time
+ */
+struct GWM_DVRRecordTimeInfo {
+  /* bit 1: GWM_DVR_RECORD_TIME_FRONT_LONG
+   * bit 1: GWM_DVR_RECORD_TIME_FRONT_SHORT
+   * others: see GWM_DVR_RecordTimeType
+   */
+  uint64_t  report_bit_flag;
+  uint64_t  front_long_recorded_time;
+  uint64_t  front_short_recorded_time;
+  uint64_t  front_time_lapse_recorded_time;
+  uint64_t  front_emergency_recorded_time;
+  uint64_t  incar_long_recorded_time;
+  uint64_t  incar_short_recorded_time;
+  uint64_t  incar_time_lapse_recorded_time;
+  uint64_t  incar_emergency_recorded_time;
+  uint64_t  avm_long_recorded_time;
+  uint64_t  avm_short_recorded_time;
+  uint64_t  avm_emergency_recorded_time;
+};
+
+/**
+ * Notify DVR TF Card operation event
+ */
+struct GWM_DVRTFCardOperateEvent {
+  GWM_DVR_TFCardOperateType operation_type;
+  GWM_DVR_TFCardId tfcard_id;
+  GWM_DVRReply  reply_result;
+};
+
+/**
+ * Notify DVR Camera changed status
+ */
+struct GWM_DVRCameraStatus {
+    GWM_DVRSystemStatus         camera_status;
+    GWM_DVRCameraId    camera_id;
+};
+
+/**
+ * Notify DVR TFCard changed status
+ */
+struct GWM_DVRTFCardStatus {
+    GWM_DVR_TFCardId    tfcard_id;
+    GWM_DVR_TFCardStatus  tfcard_status;
+};
+
+/**
+ * Notify DVR TFCard capacity changed status
+ */
+struct GWM_DVRTFCardCapacityStatus {
+    GWM_DVR_TFCardId  tfcard_id;
+    GWM_DVRCameraId   camera_id;
+    GWM_DVRCapacityId capacity_id;
+    GWM_DVRCapacityStatus capacity_status;
+};
+
+/**
+ * Notify DVR TFCard capacity cost changed status
+ */
+struct GWM_DVRTFCardCapacityCostStatus {
+    GWM_DVRCameraId    camera_id;
+    GWM_DVR_TFCardId  tfcard_id;
+    float loop_capacity;
+    float emergency_capacity;
+    float user_capacity;
+    float total_capacity;
+    float used_capacity;
+    float total_export_capacity;
+    float free_export_capacity;
+    GWM_DVR_TFType tfcard_type;
+};
+
+
+/**
+ * Notify DVR upload Requset status
+ */
+struct GWM_DVRUploadFileStatus{
+    string 	file_path;
+    uint64_t    file_size;
+    uint64_t    sequence;
+    GWM_DVR_TFCardId    tfcard_id;
+    GWM_DVRCameraId camera_id;
+    GWM_DVRUploadType upload_type;
+};
+
+struct GWM_DVRUploadFileResult{
+    string  file_path;
+    uint64_t sequence;
+    GWM_DVRUploadStatus uploadstatus;
+};
+
+
+/**
+ * Notify DVR Broadcast miao Call  Actions
+ */
+enum GWM_QNXModuleName: uint8_t {
+    DVR_QNX_CLUSTER = 0,
+    DVR_QNX_SERVER  = 1,
+};
+
+enum GWM_DVRActModules: uint8_t {
+    GWM_DVR_MIAO_CALL           = 0,
+    GWM_DVR_REMOTE_MONITOR      = 1,
+    GWM_DVR_GUARD_MODE          = 2,
+};
+
+enum GWM_DVRActCommand: uint8_t {
+    GWM_OPEN  = 0,
+    GWM_CLOSE  = 1,
+};
+
+enum GWM_OperationStatus: uint8_t {
+    GWM_OPERATION_STATUS_NULL                  = 0,
+    GWM_OPERATION_STATUS_OK                    = 1,
+    GWM_OPERATION_STATUS_ERROR                 = 2,
+};
+
+struct GWM_DVRBroadcastActCommand{
+    GWM_DVRActModules  act_module;
+    GWM_DVRActCommand  act_cmd;
+    uint64_t           sequence;
+};
+
+struct GWM_DVRBroadcastActionsResult{
+    GWM_QNXModuleName       modules_name;
+    GWM_DVRActModules       act_module;
+    GWM_DVRActCommand       act_cmd;
+    GWM_OperationStatus     operation_status;
+    uint64_t                sequence;
+};
+
+enum GWM_ModuleEvent: uint8_t {
+    GWM_NULL                  = 0,
+    GWM_CRASH                 = 1,
+};
+struct GWM_DVRSendModuleEvent{
+    GWM_DVRActModules  act_module;
+    GWM_ModuleEvent    event;
+    uint64_t           sequence;
+};
+
+struct GWM_DVRModulesEventResult{
+    GWM_DVRActModules  modules_name;
+    GWM_QNXModuleName  act_module;
+    GWM_ModuleEvent    event;
+    uint64_t           sequence;
+};
+
+
+//add for outside DVR
+/**
+ * The parameter of DVR  status
+ */
+enum GWM_DVRStatusReply: uint8_t {
+    GWM_DVR_STATUS_OK     =  0,
+    GWM_DVR_STATUS_DISABLE = 1,
+};
+
+/**
+ * The parameter of DVR  File type
+ */
+enum GWM_DVRFileType: uint8_t {
+    GWM_DVRFileNormalVideo              = 0,
+    GWM_DVRFileEventVideo               = 1,
+    GWM_DVRFileUserData                 = 2,
+    GWM_DVRFileExportData               = 3,
+    GWM_DVRFileSentinelModeData         = 4,
+    GWM_DVRFileGuardianModeData         = 5,
+};
+
+enum GWM_DVRExportType: uint8_t {
+    GWM_DVRFilterMode      = 0,
+    GWM_DVRCoverMode       = 1,
+    GWM_DVRCopyMode        = 2,
+};
+
+//文件类型, cameraid, tfid, 文件个数, 上次最后一个文件名
+struct GWM_DVRFileListREQ{
+    GWM_DVRFileType operation_type;
+    GWM_DVRCameraId camera_id;
+    uint8_t     file_sum;
+    string      last_file_name;
+};
+
+
+//添加文件列表返回接口
+//文件url, 缩略图url, 文件类型, cameraid,文件大小
+struct GWM_DVRFileListResult{
+    string file_path_url;
+    string thumb_path_url;
+    GWM_DVRFileType operation_type;
+    GWM_DVRCameraId camera_id;
+};
+
+enum GWM_DVREventOperationTypes: uint8_t {
+    GWM_EventStart  = 0,
+    GWM_EventStop   = 1,
+    GWM_EventFailed   = 2,
+};
+
+enum GWM_DVREventType: uint8_t {
+    GWM_ManualCapture_ByButton          = 0,
+    GWM_ManualCapture_ByHUT             = 1,
+    GWM_ManualRecording_ByButton        = 2,
+    GWM_ManualRecording_ByHUT           = 3,
+    GWM_TimeLapseVideo                  = 4,
+    GWM_ParkingMonitorVideo             = 5,
+    GWM_VehicleCollisionVideo           = 6,
+    GWM_AirBagEjectionVideo             = 7,
+    GWM_AEBVideo                        = 8,
+    GWM_BurglarAlarmVideo               = 9,
+    GWM_ContinuousCapture               = 10,
+    GWM_ShortVideoRecording_ByButton    = 11,
+    GWM_ShortVideoRecording_ByHUT       = 12,
+    GWM_APSVideo                        = 13,
+    GWM_ACC_AEBVideo                    = 14,
+    GWM_WhistleVideo                    = 15,
+    GWM_RadarRingingVideo               = 16,
+    GWM_MEBVideo                        = 17,
+    GWM_HandLeftVideo                   = 18,
+    GWM_CaringMode                      = 19,
+    GWM_ExportFile                      = 20,
+    GWM_GUARDIANMODE                    = 21,
+    GWM_DELETEFILE                      = 22,
+    GWM_ManualCapture_ByFindCar         = 23,
+    GWM_SentinelMode_High               = 24,
+    GWM_SentinelMode_Low                = 25,
+};
+
+enum GWM_DVRAccessType: uint8_t {
+    GWM_ForeSight                               = 0,
+    GWM_WithinSignt                             = 1,
+    GWM_StreamingMedia_or_BackSignt_reserved    = 2,
+    GWM_360SurroundView                         = 3,
+    GWM_MultiChannel                            = 4,
+    GWM_WithinSignt_DMC                         = 5,
+};
+
+//事件上报
+//the event time is presentated as the format of YYYY-MM-DD hh:mm:ss
+struct GWM_DVREventReport{
+    string EventTime;
+    GWM_DVREventType event_type;
+    GWM_DVRCameraId camera_id;
+    string FilePath;
+    string ThumbnailPath;
+
+};
+
+//操作上报
+struct GWM_DVROperationReport{
+    GWM_DVREventOperationTypes operation_type;
+    GWM_DVREventType event_type;
+    GWM_DVRCameraId camera_id;
+};
+
+enum GWM_DVRFileOperateResult: uint8_t {
+    GWM_Success  = 0,
+    GWM_Fail  = 1,
+};
+
+//成功、文件不存在、空间不足
+enum GWM_DVRFileExportStatus: uint8_t {
+    GWM_File_Export_Success    = 0,
+    GWM_File_Missing           = 1,
+    GWM_File_Capacity_Warning  = 2,
+    GWM_File_Is_Deleting       = 3,
+    GWM_File_Other_Reason      = 4
+};
+
+enum GWM_DVREMMCStatus : uint8_t {
+    GWM_EMMC_Normal   = 0,
+    GWM_EMMC_Fault   = 1,
+};
+
+//EMMC状态上报
+struct GWM_DVREMMCReport{
+    GWM_DVREMMCStatus emmc_status;
+    uint32_t TotalCapacity;
+    uint32_t RemainingCapacity;
+};
+
+//录像状态
+enum GWM_DVRRecordStatus : uint8_t {
+    GWM_Inactive   = 0,
+    GWM_Active   = 1,
+};
+
+//OMC拍照状态
+enum GWM_DVROMCCaptureStatus : uint8_t {
+    GWM_OMCCapture_Success   = 0,
+    GWM_OMCCapture_Unknow   = 1,
+    GWM_OMCCapture_EventTypeError   = 2,
+    GWM_OMCCapture_AccessTypeError  = 3,
+    GWM_OMCCapture_Busy   = 4,
+    GWM_OMCCapture_CapacityNotEnough   = 5,
+};
+
+//TF卡中文件类型容量
+enum GWM_TFAllFileCapacity : uint8_t {
+    GWM_Get_All_File_Type_Capacity      = 0,
+    GWM_Get_Array_Capacity              = 1,
+};
+
+//TF卡中文件类型
+enum GWM_ParamFileType : uint8_t {
+    GWM_CustomData      = 0,
+    GWM_ExportData      = 1,
+    GWM_SentinelData    = 2,
+    GWM_GuardData       = 3,
+};
+
+//TF卡中文件类型容量
+struct GWM_DVRFileCapacity{
+    GWM_ParamFileType file_type;
+    int32_t used_capacity;
+    int32_t total_capacity;
+};
+
+//文件类型, cameraid, 文件个数, 上次最后一个文件名
+struct GWM_DVRFileIncludeDateREQ{
+    GWM_DVRFileType file_type;
+    GWM_DVRCameraId camera_id;
+    uint8_t     file_sum;
+    string      file_name;
+};
+
+//TF卡中日期内所包含的文件
+struct GWM_FileListIncludeDate{
+    string file_path;
+    string thumbnail_path;
+    GWM_DVRFileType file_type;
+    GWM_DVRCameraId camera_id;
+    string event_time;
+    uint8_t file_number;
+};

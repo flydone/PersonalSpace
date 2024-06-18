@@ -1,0 +1,91 @@
+/*************************************************************************
+ * Copyright (C) 2020-2021 GWM Automotive Inc.
+ *
+ * The copyright notice above does not evidence any actual
+ * or intended publication of such source code.
+ * The code contains GWM Confidential Proprietary Information.
+ *************************************************************************/
+/*
+ * Author : 
+ * Version: 
+ * Data   ：2021.6.18
+ */
+ 
+/*server name ： svc://dvr_fdbus_interaction*/
+ 
+syntax = "proto3";
+
+package DVRFdb;
+
+option optimize_for = LITE_RUNTIME;
+// define types
+enum FdbCameraServerMsgId
+{
+    DVR_Default						                = 0;   /*default*/
+	
+    DVR_Android_Send_Operation_Action	            = 1;  /*广播消息，通知Client端 操作命令*/
+
+    DVR_FDB_QNX_UPLOAD_Operation_ACK                = 2;  /*ACK 消息，告知Server端 操作结果*/
+
+    DVR_Android_Send_Modules_Event                  = 3;  /*广播消息，通知Client端 模块事件*/
+
+    DVR_FDB_QNX_Modules_Event_ACK                   = 4;  /*ACK 消息，告知Server端 模块事件结果*/
+}
+
+enum DVROperationStatus {
+    DVR_OPERATION_STATUS_NULL                  = 0;
+    DVR_OPERATION_STATUS_OK                    = 1;
+    DVR_OPERATION_STATUS_ERROR                 = 2;
+}
+
+enum DVRClientType {
+    DVR_QNX_CLUSTER                             = 0;
+    DVR_QNX_SERVER                              = 1;
+}
+
+enum DVROperationType {
+    DVR_MIAO_CALL                               = 0;
+    DVR_Remote_Monitoring                       = 1;
+    DVR_Guard_Mode                              = 2;
+}
+
+enum DVRActionType {
+    act_on                              = 0;
+    act_off                             = 1;
+}
+
+message DVRFdbBroadcastOperationAction
+{
+    DVROperationType 	operation_type                    = 1; 
+    DVRActionType       action_type             		  = 2;  
+    int64               sequence                            = 3;            
+}
+
+message DVRFdbBroadcastOperationStatus
+{
+    DVRClientType       client_name                         = 1; 
+    DVROperationType 	operation_type                      = 2; 
+    DVRActionType       action_type             		    = 3;  
+    DVROperationStatus 	operation_status                    = 4;
+    int64               sequence                            = 5; 
+}
+
+enum DVRModuleEvent{
+    GWM_NULL                  = 0;
+    GWM_CRASH                 = 1;
+}
+
+message DVRFdbBroadcastModuleEventAction
+{
+    DVROperationType 	 operation_type                      = 1; 
+    DVRModuleEvent       act_event            		    = 2;  
+    int64                sequence                       = 3;         
+}
+
+message DVRFdbSendModuleEventStatus
+{
+    DVROperationType 	 operation_type                      = 1; 
+    DVRClientType 	     client_name                    = 2; 
+    DVRModuleEvent       act_event            		    = 3;  
+    int64                sequence                       = 4;         
+}

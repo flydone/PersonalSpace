@@ -1,0 +1,21 @@
+ /*************************************************************************
+ * Copyright (C) 2020-2021 GWM Automotive Inc.
+ *
+ * The copyright notice above does not evidence any actual
+ * or intended publication of such source code.
+ * The code contains GWM Confidential Proprietary Information.
+ *************************************************************************/
+
+package vendor.gwm.hardware.camera@1.0;
+
+import IDVR;
+/**
+ * Represents a automotive AVM and RVC camera interfaces.
+ */
+interface ICamera {
+    /*
+     * Application obtain the DVR interface from the camera HAL
+     * @return dvrinterface handle to the IDVR interface.
+     */
+    gwm_getDVRInterface() generates (IDVR dvrInterface);
+};
