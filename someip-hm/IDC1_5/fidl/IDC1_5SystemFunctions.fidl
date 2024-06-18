@@ -1,0 +1,66 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.IDC1_5
+
+interface IDC1_5SystemFunctions {
+    version { major 1 minor 0 }
+    broadcast VideoUpload {
+        out {
+            DataCollectTriggerStruct DataCollectTriggerStruct //0
+        }
+    }
+    struct DataCollectTriggerStruct {
+        Sys_time_us Sys_time_us
+        Collect_before_time Collect_before_time
+        Collect_after_time Collect_after_time
+        TriggerType Trigger_type
+        TriggerType Trigger_subtype
+    }
+    typedef Collect_before_time is UInt64
+    typedef Collect_after_time is UInt64
+    typedef Sys_time_us is UInt64
+    enumeration TriggerType {
+        E_TRI_NONE = 0
+        E_TRI_DIAGNOSIS = 1
+        E_TRI_DIAGNOSIS_HARDWARE = 2
+        E_TRI_DIAGNOSIS_SOFTWARE = 3
+        E_TRI_DIAGNOSIS_NETWORK = 4
+        E_TRI_ACCIDENT = 5
+        E_TRI_REMOTE = 6
+        E_TRI_EBRAKE = 7
+        E_TRI_PBRAKE = 8
+        E_TRI_BLOCK = 9
+        E_TRI_AEB = 10
+        E_TRI_SAFESTOP = 11
+        E_TRI_SMART_DODGE = 12
+        E_TRI_ELK = 13
+        E_TRI_ESS = 14
+        E_TRI_SHARP_TURN = 15
+        E_TRI_CHANGE_LANE = 16
+        E_TRI_URGENT_ACCELERATE = 17
+        E_TRI_HMI = 18
+        E_TRI_CAMERA_BUMPY = 19
+        E_TRI_ROAD_UNDULATION = 20
+        E_TRI_FISHBONE_LINE = 21
+        E_TRI_NO_LANE_LINE = 22
+        E_TRI_SPECIAL_ROAD = 23
+        E_TRI_SPECIAL_WEATHER_SCENE = 24
+        E_TRI_LANE_LINE_COVERED = 25
+        E_TRI_ANIMAL = 26
+        E_TRI_GENERAL_OBSTACLE = 27
+        E_TRI_MINI_CAR = 28
+        E_TRI_LARGE_TRUCK = 29
+        E_TRI_RAMP = 30
+        E_TRI_ADAS_OPEN = 31
+        E_TRI_CHANGE_LANE_CANCELED = 32
+        E_TRI_ADAS_CLOSE = 33
+        E_TRI_INTERVENE = 34
+        E_TRI_TRAFFIC_JAM = 35
+        E_TRI_ME_FAILSAFE = 36
+        E_TRI_CHANGE_LANE_FAILURE = 37
+        E_CUSTOMTRIGGER = 100
+    }
+}
+

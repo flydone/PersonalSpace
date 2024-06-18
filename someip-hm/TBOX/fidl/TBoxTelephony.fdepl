@@ -1,0 +1,93 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import "platform:/plugin/org.genivi.commonapi.core/deployment/CommonAPI_deployment_spec.fdepl"
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "TBoxTelephony.fidl"
+
+define org.genivi.commonapi.core.deployment for interface GREATWALL.TBOX.TBoxTelephony {
+    enumeration TBoxSimMode{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxCallOperation{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxSimState{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxCallType{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxNetType{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxResponse{
+        EnumBackingType = UInt8
+    }
+    enumeration TBoxCallState{
+        EnumBackingType = UInt8
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface GREATWALL.TBOX.TBoxTelephony {
+    SomeIpServiceID = 513  //0x0201
+
+    attribute TBoxSimStatus {
+        SomeIpGetterID = 4097  //0x1001
+        SomeIpNotifierID = 36865  //0x9001
+        SomeIpEventGroups = {1} //TBoxTelephony0x0001
+    }
+    attribute TBoxSignalStrength {
+        SomeIpGetterID = 4099  //0x1003
+        SomeIpNotifierID = 36867  //0x9003
+        SomeIpEventGroups = {1} //TBoxTelephony0x0001
+    }
+    attribute TBoxNetworkProvider {
+        SomeIpGetterID = 4098  //0x1002
+        SomeIpNotifierID = 36866  //0x9002
+        SomeIpEventGroups = {1} //TBoxTelephony0x0001
+    }
+    method TBoxCallOperation {
+        SomeIpMethodID = 2  //0x0002
+    }
+    method TBoxSIMInfor {
+        SomeIpMethodID = 3  //0x0003
+        out{
+            ICCID{
+                SomeIpStringLength = 24
+                SomeIpStringLengthWidth = 0
+            }
+            IMEI{
+                SomeIpStringLength = 19
+                SomeIpStringLengthWidth = 0
+            }
+            IMSI{
+                SomeIpStringLength = 19
+                SomeIpStringLengthWidth = 0
+            }
+        }
+    }
+    method TBoxStartCall {
+        SomeIpMethodID = 1  //0x0001
+    }
+    broadcast TBoxCallState {
+        SomeIpEventID = 32769  //0x8001
+        SomeIpEventGroups = {1} //TBoxTelephony0x0001
+    }
+    array TBoxTelephoneNumber {
+        SomeIpArrayMinLength = 16
+        SomeIpArrayMaxLength = 16
+        SomeIpArrayLengthWidth = 0
+    }
+    struct TBoxNetworkProviderStruct {
+        SomeIpStructLengthWidth = 4
+     }
+}
+
+define org.genivi.commonapi.someip.deployment for provider TBoxTelephony {
+    instance GREATWALL.TBOX.TBoxTelephony {
+        InstanceId = "TBoxTelephony01"
+        SomeIpInstanceID = 1  //0x01
+    }
+}

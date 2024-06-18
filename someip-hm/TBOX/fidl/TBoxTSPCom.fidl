@@ -1,0 +1,18 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxTSPCom {
+    version { major 1 minor 0 }
+    attribute TBoxTSPLoginState TBoxTSPLoginState readonly
+    enumeration TBoxTSPLoginState {
+        E_CONNECTING = 0
+        E_CONNECTED = 1
+        E_DISCONNECTED = 2
+        E_NETWORK_UNREACHABLE = 3
+        E_LOGGINGFAIL = 4
+    }
+}
+

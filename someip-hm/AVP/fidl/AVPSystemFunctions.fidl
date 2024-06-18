@@ -1,0 +1,155 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.AVP
+
+interface AVPSystemFunctions {
+    version { major 1 minor 0 }
+    method ParkingListRequest fireAndForget {
+        in {
+            HUTRequest ParkingListRequest //0
+        }
+    }
+    method PAVPFunction fireAndForget {
+        in {
+            HUTRequest PAVPFunctionOpen //0
+        }
+    }
+    method PathInfoRequest {
+        in {
+            HUTRequest PathInfoRequest //0
+        }
+        out {
+            PathInfoStructArray PathInfoStructArray //0
+        }
+    }
+    method PathInfoSelect fireAndForget {
+        in {
+            PathNum PathNum //0
+        }
+    }
+    method PathInfoRename {
+        in {
+            PathNum PathNum //0
+            PathName PathName //1
+        }
+        out {
+            PathInfoStructArray PathInfoStructArray //0
+        }
+    }
+    method PathInfoOperation {
+        in {
+            PathInfoOperation PathInfoOperation //0
+            PathNum PathNum //1
+        }
+        out {
+            PathInfoStructArray PathInfoStructArray //0
+        }
+    }
+    method GeoFenceRequest {
+        in {
+            HUTRequest GeoFenceRequest //0
+        }
+        out {
+            GeoFenceResponse GeoFenceResponse //0
+        }
+    }
+    method PathInfoAdd {
+        in {
+            PathType PathType //0
+            PathLotType PathLotType //1
+            PathNum PathNum //2
+            PathName PathName //3
+        }
+        out {
+            PathInfoStructArray PathInfoStructArray //0
+        }
+    }
+    broadcast ParkingListResponseNACK {
+        out {
+            ParkingListResponseNACK ParkingListResponseNACK //0
+        }
+    }
+    broadcast ParkingListResponseACK {
+        out {
+            ParkingListStructArray ParkingListResponseACK //0
+        }
+    }
+    typedef PathNum is UInt8
+    array ParkingListStructArray of ParkingListStruct
+    struct ParkingListStruct {
+        id id
+        name name
+        address address
+        lon lon
+        lat lat
+        distance distance
+        idle_num idle_num
+        total_num total_num
+        floors floors
+    }
+    typedef id is UInt16
+    typedef name is String
+    typedef floors is String
+    typedef total_num is UInt16
+    typedef idle_num is UInt16
+    typedef lon is Float
+    typedef lat is Float
+    typedef distance is Float
+    typedef address is String
+    enumeration PathLotType {
+        E_IDLE = 0
+        E_FIXEDPARKINGLOT = 1
+        E_RANDOMPARKINGLOT = 2
+        E_RESERVED = 3
+    }
+    enumeration PathType {
+        E_IDLE = 0
+        E_PARKINGINTYPE = 1
+        E_PARKINGOUTTYPE = 2
+        E_RESERVED = 3
+    }
+    typedef PathName is String
+    enumeration PathInfoOperation {
+        E_DELETE = 0
+        E_SETTOP = 1
+        E_RESERVED = 2
+    }
+    enumeration ParkingListResponseNACK {
+        E_FAILED_NETWORK = 0
+        E_RESERVED = 1
+    }
+    array PathInfoStructArray of PathInfoStruct
+    struct PathInfoStruct {
+        PathId PathId
+        PathNum PathNum
+        PathType PathType
+        PathLotType PathLotType
+        PathStatus PathStatus
+        PathLearnRate PathLearnRate
+        PathDistance PathDistance
+        PathName PathName
+        PathPic PathPic
+    }
+    typedef PathDistance is UInt8
+    typedef PathLearnRate is UInt8
+    array PathPic of UInt8
+    typedef PathId is UInt8
+    enumeration PathStatus {
+        E_IDLE = 0
+        E_VALIDPATH = 1
+        E_LEARNINGINPROCESSPATH = 2
+        E_INVALIDPATH = 3
+    }
+    enumeration HUTRequest {
+        E_RESERVED = 0
+        E_REQUEST = 1
+    }
+    enumeration GeoFenceResponse {
+        E_OUTSIDE = 0
+        E_INSIDE = 1
+        E_PAVPSYSTEMUNAVALIABLE = 2
+    }
+}
+

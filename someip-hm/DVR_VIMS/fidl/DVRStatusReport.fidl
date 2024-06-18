@@ -1,0 +1,291 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.DVR_VIMS
+
+interface DVRStatusReport {
+    version { major 1 minor 0 }
+    attribute DVRSensorStatusStruct DVRSensorStatusReport readonly
+    attribute DVRSystemStatus DVRSystemStatusReport readonly
+    method DVRContinuousCapture {
+        in {
+            AccessType AccessType //0
+            CaptureNumber CaptureNumber //1
+            CaptureInterval CaptureInterval //2
+        }
+        out {
+            SetResult ContinuousCaptureACK //0
+        }
+    }
+    method DVRStatusReportACK fireAndForget {
+        in {
+            SetResult StatusReportACK //0
+        }
+    }
+    method DVRTimelapseVideoTape {
+        in {
+            TimelapseVideoInterval TimelapseVideoInterval //0
+            TimelapseVideoTotalFrameNumber TimelapseVideoTotalFrameNumber //1
+            DVRTimelapseVideoPlayFrameNumber DVRTimelapseVideoPlayFrameNumber //2
+            AccessType AccessType //3
+        }
+        out {
+            SetResult TimelapseVideoTapeACK //0
+        }
+    }
+    method DVRManualOperation {
+        in {
+            ManualOperation ManualOperation //0
+            AccessType AccessType //1
+        }
+        out {
+            SetResult ManualOperationACK //0
+        }
+    }
+    method StopShortVideoRecording {
+        in {
+            AccessType VideoRecordingChannel //0
+        }
+        out {
+            SetResult VideoRecordingACK //0
+        }
+    }
+    method PictureTransferRequest {
+        in {
+            EventTime EventTime //0
+            EventType EventType //1
+            AccessType AccessType //2
+            FileID FileID //3
+            FileSize FileSize //4
+            FileContentArray FileContentArray //5
+        }
+        out {
+            OMCCaptureFaileCode OMCCaptureFaileCode //0
+        }
+    }
+    method CaringMode {
+        in {
+            AccessType AccessType //0
+            TotalCareTime TotalCareTime //1
+        }
+        out {
+            SetResult CaringModeACK //0
+        }
+    }
+    method OMCThemePictureResult {
+        in {
+            AccessType AccessType //0
+            ThemePictureID ThemePictureID //1
+            FileSize FileSize //2
+            FileContentArray FileContentArray //3
+        }
+        out {
+            OMCCaptureFaileCode OMCCaptureFaileCode //0
+        }
+    }
+    method OMCCaptureRequest {
+        in {
+            EventTime EventTime //0
+            EventType EventType //1
+            AccessType AccessType //2
+            FileID FileID //3
+            FileSize FileSize //4
+        }
+        out {
+            OMCCaptureFaileCode OMCCaptureFaileCode //0
+        }
+    }
+    method StartShortVideoRecording {
+        in {
+            AccessType VideoRecordingChannel //0
+            PreRecordingTime PreRecordingTime //1
+            TotalRecordingTime TotalRecordingTime //2
+        }
+        out {
+            SetResult VideoRecordingACK //0
+        }
+    }
+    method TFCardExportCapacityQuery {
+        in {
+            TFCardOption TFCardOption //0
+        }
+        out {
+            TotalExportCapacity TotalExportCapacity //0
+            FreeExportCapacity FreeExportCapacity //1
+        }
+    }
+    broadcast DVREMMCStatusReport {
+        out {
+            EMMCStatus EMMCStatus //0
+            EMMCCapacityStruct EMMCCapacityStruct //1
+        }
+    }
+    broadcast OMCThemePictureReport {
+        out {
+            AccessType AccessType //0
+            ThemePictureID ThemePictureID //1
+        }
+    }
+    broadcast AsyncDeleteOperationProgress {
+        out {
+            TotalTransProgress DeleteProgress //0
+        }
+    }
+    broadcast EventOperationReport {
+        out {
+            EventOperationType EventOperationType //0
+            EventType EventType //1
+            AccessType AccessType //2
+        }
+    }
+    broadcast DVRTFStatusReport {
+        out {
+            TFCardOption TFCardOption //0
+            TFCardStatus TFCardStatus //1
+            TFCardCapacity TFCardCapacity //2
+        }
+    }
+    broadcast DVREventReport {
+        out {
+            EventTime EventTime //0
+            EventType EventType //1
+            AccessType AccessType //2
+            FilePath FilePath //3
+            ThumbnailPath ThumbnailPath //4
+        }
+    }
+    broadcast ExportOperationProgressReport {
+        out {
+            ExportFileInfoStruct ExportFileInfoStruct //0
+            TotalTransProgress TotalTransProgress //1
+        }
+    }
+    enumeration TFCardStatus {
+        E_DVR_NOT_FOUND = 0
+        E_DVR_FAULT = 1
+        E_DVR_MEMEORY_FULL = 2
+        E_DVR_OK = 3
+        E_WRITESLOWLY = 4
+        E_DVR_EMERGENCY_SPACE_FULL = 5
+        E_DVR_CAPACITY_NOT_SUPPORTED = 6
+    }
+    enumeration EventOperationType {
+        E_EVENTSTART = 0
+        E_EVENTSTOP = 1
+        E_EVENTFAILED = 2
+    }
+    enumeration DVRSystemStatus {
+        E_DVR_OK = 0
+        E_DVR_FAULT = 1
+    }
+    typedef TimelapseVideoInterval is UInt8
+    struct ExportFileInfoStruct {
+        CurrentTransProgress CurrentTransProgress
+        FilePath FilePath
+    }
+    typedef FilePath is String
+    typedef CurrentTransProgress is UInt8
+    enumeration TFCardOption {
+        E_TFCARD1 = 0
+        E_TFCARD2 = 1
+    }
+    typedef PreRecordingTime is UInt8
+    typedef CaptureNumber is UInt8
+    typedef TotalExportCapacity is UInt32
+    enumeration EMMCStatus {
+        E_EMMCNORMAL = 0
+        E_EMMCFAULT = 1
+    }
+    typedef ThumbnailPath is String
+    typedef TotalTransProgress is UInt8
+    typedef FileSize is UInt32
+    typedef TotalRecordingTime is UInt8
+    struct DVRSensorStatusStruct {
+        AccessType AccessType
+        DVRSensorStatus DVRSensorStatus
+    }
+    enumeration AccessType {
+        E_FORESIGHT = 0
+        E_WITHINSIGNT_OMC = 1
+        E_STREAMINGMEDIA_OR_BACKSIGNT_RESERVED = 2
+        E_360SURROUNDVIEW = 3
+        E_MULTICHANNEL = 4
+        E_WITHINSIGNT_DMC = 5
+    }
+    enumeration DVRSensorStatus {
+        E_SENSOR_OK = 0
+        E_SENSOR_FAULT = 1
+        E_SENSOR_INIT = 2
+    }
+    typedef DVRTimelapseVideoPlayFrameNumber is UInt8
+    enumeration EventType {
+        E_MANUALCAPTURE_BYBUTTON = 0
+        E_MANUALCAPTURE_BYHUT = 1
+        E_MANUALRECORDING_BYBUTTON = 2
+        E_MANUALRECORDING_BYHUT = 3
+        E_TIMELAPSEVIDEO = 4
+        E_PARKINGMONITORVIDEO = 5
+        E_VEHICLECOLLISIONVIDEO = 6
+        E_AIRBAGEJECTIONVIDEO = 7
+        E_AEBVIDEO = 8
+        E_BURGLARALARMVIDEO = 9
+        E_CONTINUOUSCAPTURE = 10
+        E_SHORTVIDEORECORDING_BYBUTTON = 11
+        E_SHORTVIDEORECORDING_BYHUT = 12
+        E_APSVIDEO = 13
+        E_ACC_AEBVIDEO = 14
+        E_WHISTLEVIDEO = 15
+        E_RADARRINGINGVIDEO = 16
+        E_MEBVIDEO = 17
+        E_HANDLEFTVIDEO = 18
+        E_CARINGMODE = 19
+        E_EXPORTFILE = 20
+        E_GUARDIANMODE = 21
+        E_DELETEFILE = 22
+        E_MANUALCAPTURE_BYFINDCAR = 23
+        E_SENTINELMODE_HIGH = 24
+        E_SENTINELMODE_LOW = 25
+    }
+    enumeration ManualOperation {
+        E_MANUALCAPTURE = 0
+        E_MANUALRECORDING = 1
+        E_STOPTIMELAPSEVIDEOTAPE = 2
+        E_STOPCARINGMODE = 3
+        E_STOPEXPORTFILE = 4
+        E_OMCMANUALCAPTURE = 5
+        E_STOPASYNCDELETEFILE = 6
+        E_FINDCARCAPTURE = 7
+    }
+    typedef TimelapseVideoTotalFrameNumber is UInt16
+    typedef TotalCareTime is UInt8
+    typedef FreeExportCapacity is UInt32
+    typedef FileID is UInt32
+    typedef CaptureInterval is UInt8
+    typedef EventTime is String
+    enumeration SetResult {
+        E_SUCCESSFUL = 0
+        E_FAILED = 1
+    }
+    array FileContentArray of UInt8
+    enumeration OMCCaptureFaileCode {
+        E_SUCCESS = 0
+        E_UNKNOW = 1
+        E_EVENTTYPEERROR = 2
+        E_ACCESSTYPEERROR = 3
+        E_BUSY = 4
+        E_CAPACITYNOTENOUGH = 5
+    }
+    typedef ThemePictureID is UInt32
+    struct EMMCCapacityStruct {
+        TotalCapacity TotalCapacity
+        RemainingCapacity RemainingCapacity
+    }
+    typedef RemainingCapacity is UInt32
+    typedef TotalCapacity is UInt32
+    struct TFCardCapacity {
+        TotalCapacity TotalCapacity
+        RemainingCapacity RemainingCapacity
+    }
+}
+

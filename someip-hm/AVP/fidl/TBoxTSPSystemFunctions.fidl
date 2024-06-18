@@ -1,0 +1,64 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxTSPSystemFunctions {
+    version { major 1 minor 0 }
+    method StsRequest fireAndForget {
+        in {
+            StsRequest StsRequest //0
+        }
+    }
+    method RegisterRequest fireAndForget {
+        in {
+            RegisterRequest RegisterRequest //0
+        }
+    }
+    broadcast StsResponse {
+        out {
+            StsResponse StsResponse //0
+        }
+    }
+    broadcast StsContent {
+        out {
+            StsContent StsContent //0
+        }
+    }
+    broadcast RegisterContent {
+        out {
+            RegisterContent RegisterContent //0
+        }
+    }
+    broadcast RegisterResponse {
+        out {
+            RegisterResponse RegisterResponse //0
+        }
+    }
+    enumeration StsResponse {
+        E_RESERVED = 0
+        E_SUCCESS = 1
+        E_FAILED_NETWORK = 2
+        E_FAILED_TSPSERVICE = 3
+        E_FAILED_CIOUDSERVICE = 4
+    }
+    typedef StsContent is String
+    enumeration RegisterResponse {
+        E_RESERVED = 0
+        E_SUCCESS = 1
+        E_FAILED_TSPSERVICE = 2
+    }
+    typedef RegisterContent is String
+    enumeration StsRequest {
+        E_STSFROMBAIDU = 0
+        E_STSFROMMOMENTA = 1
+        E_SRCFROMBAIDU = 2
+        E_SRCFROMMOMENTA = 3
+    }
+    enumeration RegisterRequest {
+        E_RESERVED = 0
+        E_REQUEST = 1
+    }
+}
+

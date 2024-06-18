@@ -1,0 +1,598 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.IDC3_0
+
+interface HAVPandAVPFunctions {
+    version { major 1 minor 0 }
+    method SideBsdDisp {
+        in {
+            SideBsdDispRequest SideBsdDispReq //0
+        }
+        out {
+            SideBsdDispSts SideBsdDispResp //0
+        }
+    }
+    method AVMDispResp fireAndForget {
+        in {
+            AVMStsResp AVMStsResp //0
+        }
+    }
+    method HAVP_SVPSwtReq fireAndForget {
+        in {
+            BtnEnaReq BtnEnaReq //0
+        }
+    }
+    method PrkgAreaReq fireAndForget {
+        in {
+            SetPrkgArea SetPrkgArea //0
+        }
+    }
+    method AutoReq fireAndForget {
+        in {
+            AutoPushReq AutoPushReq //0
+        }
+    }
+    method PrkgFlrReq fireAndForget {
+        in {
+            SetMapFlr SetMapFlr //0
+        }
+    }
+    method SVPReq fireAndForget {
+        in {
+            SVPfunctionReq SVPfunctionReq //0
+        }
+    }
+    method PrkgTypReq fireAndForget {
+        in {
+            SetPrkgSlotTyp SetPrkgSlotTyp //0
+        }
+    }
+    method TarPrkgIDReq fireAndForget {
+        in {
+            TarMapID TarMapID //0
+        }
+    }
+    method LvngPOIReq fireAndForget {
+        in {
+            SetLvngPOI SetLvngPOI //0
+        }
+    }
+    method PrkgLotMapUpdSt fireAndForget {
+        in {
+            MapUpdSt MapUpdSt //0
+        }
+    }
+    method NearSlotIDReq fireAndForget {
+        in {
+            SelNearSlotID SelNearSlotID //0
+        }
+    }
+    method PrkgSlotReq fireAndForget {
+        in {
+            SetPrkgSlot SetPrkgSlot //0
+        }
+    }
+    method HAVPReq fireAndForget {
+        in {
+            HAVPfunctionReq HAVPfunctionReq //0
+        }
+    }
+    broadcast HAVPPathMap {
+        out {
+            HAVPMapFileArray HAVPMapFileArray //0
+        }
+    }
+    broadcast SideBsdDispErrStsInfo {
+        out {
+            SideBsdDispErrorSts SideBsdDispErrSts //0
+        }
+    }
+    broadcast AVMDispReq {
+        out {
+            AVMStsReq AVMStsReq //0
+        }
+    }
+    broadcast HAVPPathInfo {
+        out {
+            HAVPLearningWorldArray HAVPLearningWorldArray //0
+        }
+    }
+    broadcast HAVPRendergInfo {
+        out {
+            HAVPVehDataArray HAVPVehDataArray //0
+        }
+    }
+    broadcast SideBsdDispStsInfo {
+        out {
+            SideBsdDispStatus SideBsdDispSts //0
+        }
+    }
+    broadcast HAVP_SVPScrnDispInfo {
+        out {
+            HAVP_SVPScrnInfoStruct HAVP_SVPScrnInfoStruct //0
+        }
+    }
+    typedef SetPrkgSlot is UInt16
+    enumeration BtnEnaReq {
+        E_NONE = 0
+        E_CONTINUE_SEARCH_SLOT = 1
+        E_ACTIVE_SIGNAL = 2
+        E_START_HAVP_VR = 3
+        E_CONFRIM_MAPBUILT = 4
+        E_CANCEL = 5
+        E_CONFRIM_START_PARKING = 6
+        E_SEARCH_SLOT_ALONG_WAY = 7
+        E_HAVP_COMPLETED = 8
+        E_TRY = 9
+        E_LEARNING_COMPLETED = 10
+        E_CONTINUE_LEARN = 11
+        E_START_SVP_VR = 12
+    }
+    struct HAVP_SVPScrnInfoStruct {
+        MapUpdateReq MapUpdateReq
+        CurrMAPID CurrMAPID
+        FunctBtnDisp FunctBtnDisp
+        FunctBtnSts FunctBtnSts
+        FunctWorkSts FunctWorkSts
+        Signal_Indnc Signal_Indnc
+        InterfaceDisTyp InterfaceDisTyp
+        PopupDisp PopupDisp
+        MapBuildProcBar MapBuildProcBar
+        StartPrkBtnDisp StartPrkBtnDisp
+        UpdateRouteBtnDisp UpdateRouteBtnDisp
+        GuidanceSts GuidanceSts
+        ActualMapFlr ActualMapFlr
+        CurrLeavingPOI CurrLeavingPOI
+        ActualPrkgSlotTyp ActualPrkgSlotTyp
+        ActualPrkgSlot ActualPrkgSlot
+        ActualPrkgArea ActualPrkgArea
+        HAVPFunctTextDisp HAVPFunctTextDisp
+        SVPFunctTextDisp SVPFunctTextDisp
+        BtnEnaAck BtnEnaAck
+        HAVPfunctionSts HAVPfunctionSts
+        AutoPushSts AutoPushSts
+        SVPfunctionSts SVPfunctionSts
+    }
+    enumeration SVPFunctTextDisp {
+        E_NONE = 0
+        E_PLEASE_CONFIRM_FINAL_POSITION_CLICK_START = 1
+        E_RELEASE_THE_BRAKES_AND_WE_SET_OFF = 2
+        E_DRIVE_TO_YOUR_TERMINAL_SLOT = 3
+        E_DRIVE_TO_YOUR_TERMINAL_EXIT = 4
+        E_PARK_IN_CRUISING = 5
+        E_TURN_LEFT = 6
+        E_TURN_RIGHT = 7
+        E_CROSSING = 8
+        E_NARROW_ROAD = 9
+        E_ROAD_DIFFICULT_HELP_ME_DRIVE = 10
+        E_INTO_THE_RAMP = 11
+        E_OUT_OF_THE_RAMP = 12
+        E_WAIT_FOR_THE_CAR_AHEAD = 13
+        E_GO_AROUND_THE_VEHICLE_AHEAD = 14
+        E_THE_REAR_VEHICLE_FOLLOW = 15
+        E_THE_REAR_VEHICLE = 16
+        E_PEDESTRIAN = 17
+        E_PEDESTRIAN_CROSSING = 18
+        E_AVOID_NEARBY_OBSTACLES = 19
+        E_ARRIVING_YOUR_SLOT = 20
+        E_PARK_IN_PARKING = 21
+        E_ENGINE_HOOD_OPEN = 22
+        E_TRUNK_OPEN = 23
+        E_DOOR_OPEN = 24
+        E_REARVIEW_MIRROR_FOLD = 25
+        E_SEAT_BELT_LOOSEN = 26
+        E_DRIVE_NOT_INSIDE = 27
+        E_TIMEOUT = 28
+        E_STATISTIC_OBSTACLE_30S = 29
+        E_TARGET_SLOT_OCCUPIED_PLOT_AVAILABLE_NEARBY = 30
+        E_POSITIONING_UNSUCCESSFUL = 31
+        E_ILLUMINATION_CONDITIONS = 32
+        E_RAINING_CONDITIONS = 33
+        E_SVP_FAILURE = 34
+        E_ASSOCIATED_SYSTEM_FAILURE = 35
+        E_CRUSING_TIME_OUT = 36
+        E_PARKING_TIME_OUT = 37
+        E_NUMBER_OF_PAUSES_EXCEEDED = 38
+        E_VEHICLE_RANGE_TOO_LOW = 39
+        E_RCTB_FCTB_ACTIVATION = 40
+        E_AEB_ACTIVATION = 41
+        E_ESP_ACTIVATION = 42
+        E_TCS_ABS_ACTIVATION = 43
+        E_HDC_ACTIVATION = 44
+        E_TIRE_PRESSURE_IS_TOO_LOW = 45
+        E_TARGET_SLOT_OCCUPIED_NO_SLOT_NEARBY = 46
+        E_PHONE_DISCONNECTED = 47
+        E_VIDEO_MONITOR_ABNORMAL = 48
+        E_REMOTE_DEVICE_ERROR = 49
+        E_OBSTACLE_TIMEOUT = 50
+        E_PARKINGIN_FAILURE = 51
+        E_ROUTE_MATCHING_TIMEOUT = 52
+        E_ACTIVATION_FAILED = 53
+        E_CAMERA_BLOCKED = 54
+        E_THE_LOOP_CAMERA_FAULTY = 55
+        E_RADAR_FAULTY = 56
+        E_BERTH_IN_COMPLETE = 57
+        E_BERTH_OUT_COMPLETE = 58
+        E_PULL_UP_EPB = 59
+        E_GEAR_INTERVENE = 60
+        E_STEERING_INTERVENE = 61
+        E_BRAKE_INTERVENE = 62
+        E_CRUSING_USER_EXIT = 63
+        E_CRUSING_EXCESSIVE_SLOPE = 64
+        E_VEHICLE_BACK = 65
+        E_HANDS_OFF_THE_STEERING_WHEEL = 66
+        E_DRIVING_MODE_NOT_SUPPORTED = 67
+        E_GO_AROUND_NEARBY_OBSTACLES = 68
+        E_GO_AROUND_THE_COMING_VEHICLE = 69
+        E_RELEASE_THE_BRAKE_PARKING_START = 70
+        E_AUTO_PARKING_BE_READY_TO_BRAKE = 71
+        E_PAY_ATTENTION_TO_THE_RISK_OF_SCRATCHES = 72
+        E_DETECTING_PARKING_SPACE = 73
+        E_PARKING_SUSPENDED_CLOSE_TRUNK = 74
+        E_PARKING_SUSPENDED_CLOSE_DOOR = 75
+        E_PARKING_SUSPENDED_FASTEN_SEAT_BELT = 76
+        E_PARKING_SUSPENDED_FOLD_THE_MIRROR = 77
+        E_PARKING_SUSPENDED_CLOSE_CABIN_COVER = 78
+        E_PARKING_SUSPENDED_OBSTACLES_DETECTED = 79
+        E_PARKING_SUSPENDED_PEDESTRIAN_DETECTED = 80
+        E_PARKING_SUSPENDED_VEHICLE_DETECTED = 81
+        E_PARKING_CONTINUES = 82
+        E_BRAKE_RECOVERED_CONFIRM_TO_CONTINUE = 83
+        E_CRUSING_SPEED_TOO_HIGH = 84
+        E_PARKING_SUSPENDED_PLEASE_RELEASE_THE_BREAK_PEDAL_CRUSING_SPEED_TOO_HIGH = 85
+        E_PARKING_SUSPENDED_PLEASE_RELEASE_THE_ACCELERATOR_PEDAL = 86
+        E_PLEASE_KEEP_BRAKING = 87
+    }
+    enumeration ActualPrkgSlotTyp {
+        E_NO_SET = 0
+        E_SET_PRKING_SLOT = 1
+        E_SET_PRKING_SLOT_AREA = 2
+        E_RANDOM = 3
+    }
+    enumeration GuidanceSts {
+        E_NO_DISPLAY = 0
+        E_NO_COMPLETE = 1
+        E_COMPLETE1 = 2
+        E_COMPLETE2 = 3
+        E_COMPLETE3 = 4
+        E_COMPLETE4 = 5
+        E_COMPLETE5 = 6
+    }
+    enumeration HAVPfunctionSts {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration InterfaceDisTyp {
+        E_NONE = 0
+        E_PRE_MAPBUILT = 1
+        E_MAPBUILTING = 2
+        E_CRUISE = 3
+        E_MAPBUILT_COMPLETE = 4
+        E_HAVP_COMPLETED = 5
+        E_MAPSHOWTOSTART = 6
+        E_GUIDANCE = 7
+        E_SELECTSLOT_3D = 8
+        E_CRUISE_3D = 9
+        E_CHOOSE_EXIT = 10
+        E_CRUISE_EXIT = 11
+    }
+    enumeration FunctWorkSts {
+        E_STANDBY = 0
+        E_MAPBUILDING = 1
+        E_MAPBUILT_COMPLETE = 2
+        E_CRUISE = 3
+        E_FAILURE = 4
+        E_PAUSE = 5
+        E_PARKING = 6
+        E_COMPLETE = 7
+        E_FAULT = 8
+    }
+    enumeration UpdateRouteBtnDisp {
+        E_NO_DISPLAY = 0
+        E_AVAILABLE = 1
+        E_UNAVAILABLE = 2
+    }
+    enumeration AutoPushSts {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration BtnEnaAck {
+        E_NO_RESPONSE = 0
+        E_RESPONSE = 1
+    }
+    enumeration SVPfunctionSts {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration MapUpdateReq {
+        E_NO_REQUEST = 0
+        E_REQUEST = 1
+    }
+    enumeration StartPrkBtnDisp {
+        E_NO_DISPLAY = 0
+        E_AVAILABLE = 1
+        E_UNAVAILABLE = 2
+    }
+    enumeration HAVPFunctTextDisp {
+        E_NONE = 0
+        E_START_PARKING_IN = 1
+        E_ROUTE_LEARNING = 2
+        E_PLEASE_SELECT_SLOT_USE_AUTOMATIC_PARKING_AFTER_BRAKING = 3
+        E_PLEASE_USE_AUTOMATIC_PARKING_AFTER_BRAKING = 4
+        E_POUR_INTO_YOUR_PARKING_SLOT = 5
+        E_SPEED_BUMP = 6
+        E_EXCEEDS_DISTANCE = 7
+        E_LEARNING_INTO_THE_RAMP = 8
+        E_LEARNING_OFF_THE_RAMP = 9
+        E_START_PARKING_OUT = 10
+        E_ROUTE_LEARNING_PARKING_OUT = 11
+        E_FOLLOW_INSTRUCTIONS = 12
+        E_LEARNING_CAMERA_BLOCKED = 13
+        E_LEARNING_THE_LOOP_CAMERA_FAULTY = 14
+        E_LEARNING_RADAR_FAULTY = 15
+        E_LEARNING_ASSOCIATED_SYSTEM_FAULTY = 16
+        E_LEARNING_SYSTEM_FAULTY = 17
+        E_LEARNING_ILLUMINATION_CONDITIONS = 18
+        E_LEARNING_RAINING_CONDITIONS = 19
+        E_LEARNING_ENVIRONMENT_TOO_EMPTY = 20
+        E_ROUTE_REPEAT = 21
+        E_EXCESSIVE_SLOPE = 22
+        E_TIME_OUT = 23
+        E_DISTANCE_TOO_LONG = 24
+        E_SPEED_OVER_15 = 25
+        E_SPEED_TOO_HIGH = 26
+        E_LEARNING_USER_EXIT = 27
+        E_LEARNING_DOOR_OPEN = 28
+        E_LEARNING_REAR_DOOR_OPEN = 29
+        E_LEARNING_REARVIEW_MIRROR_FOLDED = 30
+        E_LEARNING_LOOSEN_SEAT_BELT = 31
+        E_BACKWARD = 32
+        E_BACKWARD_EXIT = 33
+        E_MAP_BUILDING = 34
+        E_NOT_IN_SLOT = 35
+        E_TAIL_IN_SLOT = 36
+        E_MAP_BUILD_SUCCESS = 37
+        E_MAP_BUILD_FAIL = 38
+        E_INSUFFICIENT_STORAGE_SPACE = 39
+        E_DISTANCE_TOO_SHORT = 40
+        E_HAVP_READY_TO_START = 41
+        E_KEEP_GOING = 42
+        E_RELEASE_THE_BRAKES_AND_WE_SET_OFF = 43
+        E_DRIVE_TO_YOUR_TERMINAL_SLOT = 44
+        E_DRIVE_TO_YOUR_TERMINAL_EXIT = 45
+        E_PARK_IN_CRUISING = 46
+        E_TURN_LEFT = 47
+        E_TURN_RIGHT = 48
+        E_CROSSING = 49
+        E_NARROW_ROAD = 50
+        E_ROAD_DIFFICULT_HELP_ME_DRIVE = 51
+        E_CRUSING_INTO_THE_RAMP = 52
+        E_CRUSING_OUT_OF_THE_RAMP = 53
+        E_WAIT_FOR_THE_CAR_AHEAD = 54
+        E_GO_AROUND_THE_VEHICLE_AHEAD = 55
+        E_THE_REAR_VEHICLE_FOLLOW = 56
+        E_THE_REAR_VEHICLE = 57
+        E_PEDESTRIAN = 58
+        E_PEDESTRIAN_CROSSING = 59
+        E_AVOID_NEARBY_OBSTACLES = 60
+        E_ARRIVING_YOUR_SLOT = 61
+        E_PARK_IN_PARKING = 62
+        E_CRUSING_ENGINE_HOOD_OPEN = 63
+        E_CRUSING_TRUNK_OPEN = 64
+        E_CRUSING_DOOR_OPEN = 65
+        E_CRUSING_REARVIEW_MIRROR_FOLD = 66
+        E_CRUSING_SEAT_BELT_LOOSEN = 67
+        E_DRIVE_NOT_INSIDE = 68
+        E_TIMEOUT = 69
+        E_STATISTIC_OBSTACLE_30S = 70
+        E_TARGET_SLOT_OCCUPIED_PLOT_AVAILABLE_NEARBY = 71
+        E_POSITIONING_UNSUCCESSFUL = 72
+        E_CRUSING_ILLUMINATION_CONDITIONS = 73
+        E_CRUSING_RAINING_CONDITIONS = 74
+        E_CRUSING_LVP_FAILURE = 75
+        E_CRUSING_ASSOCIATED_SYSTEM_FAILURE = 76
+        E_CRUSING_TIME_OUT = 77
+        E_PARKING_TIME_OUT = 78
+        E_NUMBER_OF_PAUSES_EXCEEDED = 79
+        E_VEHICLE_RANGE_TOO_LOW = 80
+        E_CRUSING_RCTB_FCTB_ACTIVATION = 81
+        E_CRUSING_AEB_ACTIVATION = 82
+        E_CRUSING_ESP_ACTIVATION = 83
+        E_CRUSING_TCS_ABS_ACTIVATION = 84
+        E_CRUSING_HDC_ACTIVATION = 85
+        E_TIRE_PRESSURE_IS_TOO_LOW = 86
+        E_TARGET_SLOT_OCCUPIED_NO_SLOT_NEARBY = 87
+        E_PARKINGIN_FAILURE = 88
+        E_ROUTE_MATCHING_TIMEOUT = 89
+        E_ACTIVATION_FAILED = 90
+        E_CRUISING_CAMERA_BLOCKED = 91
+        E_CRUISING_THE_LOOP_CAMERA_FAULTY = 92
+        E_CRUISING_RADAR_FAULTY = 93
+        E_SEARCH_SLOT_ALONG_WAY = 94
+        E_BERTH_IN_COMPLETE = 95
+        E_BERTH_OUT_COMPLETE = 96
+        E_PULL_UP_EPB = 97
+        E_GEAR_INTERVENE = 98
+        E_STEERING_INTERVENE = 99
+        E_BRAKE_INTERVENE = 100
+        E_CRUSING_USER_EXIT = 101
+        E_CRUSING_EXCESSIVE_SLOPE = 102
+        E_CRUSING_SPEED_TOO_HIGH = 103
+        E_VEHICLE_BACK = 104
+        E_HANDS_OFF_THE_STEERING_WHEEL = 105
+        E_DRIVING_MODE_NOT_SUPPORTED = 106
+        E_PARKING_QUIT_PARKING_SLOT_BY_YOURSELF = 107
+        E_GO_AROUND_NEARBY_OBSTACLES = 108
+        E_GO_AROUND_THE_COMING_VEHICLE = 109
+        E_RELEASE_THE_BRAKE_PARKING_START = 110
+        E_AUTO_PARKING_BE_READY_TO_BRAKE = 111
+        E_PAY_ATTENTION_TO_THE_RISK_OF_SCRATCHES = 112
+        E_DETECTING_PARKING_SPACE = 113
+        E_PARKING_SUSPENDED_CLOSE_TRUNK = 114
+        E_PARKING_SUSPENDED_CLOSE_DOOR = 115
+        E_PARKING_SUSPENDED_FASTEN_SEAT_BELT = 116
+        E_PARKING_SUSPENDED_FOLD_THE_MIRROR = 117
+        E_PARKING_SUSPENDED_CLOSE_CABIN_COVER = 118
+        E_PARKING_SUSPENDED_OBSTACLES_DETECTED = 119
+        E_PARKING_SUSPENDEDPEDESTRIAN_DETECTED = 120
+        E_PARKING_SUSPENDED_VEHICLE_DETECTED = 121
+        E_PARKING_CONTINUES = 122
+        E_BRAKE_RECOVERED_CONFIRM_TO_CONTINUE = 123
+        E_PARKING_SUSPENDED_PLEASE_RELEASE_THE_BREAK_PEDAL = 124
+        E_PARKING_SUSPENDED_PLEASE_RELEASE_THE_ACCELERATOR_PEDAL = 125
+        E_FINDING_SLOT_PLEASE_BRAKE = 126
+        E_ENGINE_HOOD_OPEN = 127
+        E_PLEASE_KEEP_BRAKING = 128
+        E_MATCH_SUCCESSFUL_START_HAVP = 129
+        E_GUIDANCE_START = 130
+        E_GUIDANCE_SUCCESS = 131
+    }
+    enumeration FunctBtnDisp {
+        E_NONE = 0
+        E_START_HAVP = 1
+        E_CONTINUE_HAVP = 2
+        E_START_SVP = 3
+        E_CONTINUE_SVP = 4
+        E_START_APA = 5
+        E_TRY = 6
+        E_SEARCH_SLOT_ALONG_WAY = 7
+        E_APA_CONTINUESEARCHSLOT = 8
+    }
+    typedef ActualPrkgSlot is UInt16
+    typedef ActualMapFlr is Int8
+    enumeration FunctBtnSts {
+        E_UNAVAILABLE = 0
+        E_AVAILABLE = 1
+        E_HIGHLIGHT = 2
+    }
+    enumeration PopupDisp {
+        E_NONE = 0
+        E_START_LEARNING = 1
+        E_LEARN_ROUTE_CONFIRM = 2
+        E_TURN_ON_BACKGROUND_FUNCTIONS = 3
+        E_PLEASE_ADJUST_UNDER_P = 4
+        E_HAVP_RAMPWAY = 5
+        E_HAVP_ENVIRONMENT_EMPTY = 6
+        E_OUTSIDE_THE_UNDERGROUND_CAR_PARK = 7
+        E_HAVP_CAMERA_BLOCKED = 8
+        E_HAVP_LOOP_CAMERA_FAULTY = 9
+        E_HAVP_RADAR_FAULTY = 10
+        E_HAVP_ASSOCIATED_SYSTEM_FAULTY = 11
+        E_HAVP_SYSTEM_FAULTY = 12
+        E_HAVP_DOOR_OPEN = 13
+        E_HAVP_REAR_DOOR_OPEN = 14
+        E_HAVP_SAFETY_BELT_UNFASTENED = 15
+        E_HAVP_ENGINE_COVER_OPEN = 16
+        E_HAVP_RCTB_FCTB_ACTIVATION = 17
+        E_HAVP_AEB_ACTIVATION = 18
+        E_HAVP_TCS_ABS_ACTIVATION = 19
+        E_HAVP_ESP_ACTIVATION = 20
+        E_HAVP_HDC_ACTIVATION = 21
+        E_HAVP_TIRE_PRESSURE_IS_TOO_LOW = 22
+        E_HAVP_ILLUMINATION_CONDITIONS = 23
+        E_HAVP_RAINING_CONDITIONS = 24
+        E_CLICK_FINISH = 25
+        E_THE_LEARNING_ROUTE_IS_NOT_LOCATED = 26
+        E_PLEASE_SWITCH_TO_D_GEAR = 27
+        E_HAVP_PUSH_REQUEST_MAP_BUILDING = 28
+        E_HAVP_PUSH_REQUEST_ROUTE_REPLAY = 29
+        E_SVP_PUSH_REQUEST = 30
+        E_ACCELERATOR_PEDAL = 31
+        E_TAKE_OVER_IMMEDIATELY = 32
+        E_REQUEST_STOP = 33
+        E_SVP_REQUEST_CLOSE_ENGINE_HOOD = 34
+        E_SVP_REQUEST_CLOSE_TRUNK = 35
+        E_SVP_REQUEST_UNFOLD_REARVIEW_MIRROR = 36
+        E_SVP_REQUEST_CLOSE_DOOR = 37
+        E_SVP_REQUEST_FASTEN_SEATBELT = 38
+        E_SVP_RCTB_FCTB_ACTIVATION = 39
+        E_SVP_AEB_ACTIVATION = 40
+        E_SVP_TCS_ABS_ACTIVATION = 41
+        E_SVP_ESP_ACTIVATION = 42
+        E_SVP_HDC_ACTIVATION = 43
+        E_SVP_TIRE_PRESSURE_IS_TOO_LOW = 44
+        E_SVP_ILLUMINATION_CONDITIONS = 45
+        E_SVP_RAINING_CONDITIONS = 46
+        E_EXCESSIVE_SLOPE = 47
+        E_SVP_VEHICLE_RANGE_TOO_LOW = 48
+        E_SVP_CAMERA_BLOCKED = 49
+        E_SVP_THE_LOOP_CAMERA_FAULTY = 50
+        E_SVP_RADAR = 51
+        E_SVP_ASSOCIATED_SYSTEM_FAULTY = 52
+        E_SVP_SYSTEM_FAULTY = 53
+        E_NEED_UPDATE = 54
+        E_MAP_UPDATING = 55
+        E_MAP_UPDATE_SUCCESS = 56
+        E_MAP_UPDATE_FAIL = 57
+        E_SVP_TURN_ON_BACKGROUND_FUNCTIONS = 58
+        E_HAVP_DRIVING_MODE_NOT_SUPPORTED = 59
+        E_SVP_DRIVING_MODE_NOT_SUPPORTED = 60
+        E_HAVP_REARVIEW_MIRROR_FOLDED = 61
+    }
+    typedef CurrLeavingPOI is UInt8
+    typedef ActualPrkgArea is UInt8
+    typedef CurrMAPID is UInt16
+    enumeration Signal_Indnc {
+        E_CAN = 0
+        E_SOMEIP = 1
+    }
+    typedef MapBuildProcBar is UInt8
+    typedef TarMapID is UInt16
+    array HAVPVehDataArray of UInt8
+    enumeration AutoPushReq {
+        E_NO_REQUEST = 0
+        E_REQUEST = 1
+    }
+    enumeration HAVPfunctionReq {
+        E_NO_REQUEST = 0
+        E_REQUEST = 1
+    }
+    enumeration MapUpdSt {
+        E_NONE = 0
+        E_UNSUCCESS = 1
+        E_UPDATE_SUCCESS = 2
+        E_UPDATING = 3
+    }
+    enumeration SideBsdDispStatus {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration SetPrkgSlotTyp {
+        E_NO_SET = 0
+        E_SET_PRKING_SLOT = 1
+        E_SET_PRKING_SLOT_AREA = 2
+        E_RANDOM = 3
+    }
+    typedef SetMapFlr is Int8
+    enumeration AVMStsReq {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration SideBsdDispSts {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration SideBsdDispErrorSts {
+        E_NOERROR = 0
+        E_SYSTEMERROR = 1
+    }
+    typedef SetLvngPOI is UInt8
+    array HAVPLearningWorldArray of UInt8
+    typedef SelNearSlotID is UInt8
+    enumeration SideBsdDispRequest {
+        E_REQUEST = 0
+    }
+    typedef SetPrkgArea is UInt8
+    array HAVPMapFileArray of UInt8
+    enumeration AVMStsResp {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration SVPfunctionReq {
+        E_NO_REQUEST = 0
+        E_REQUEST = 1
+    }
+}
+

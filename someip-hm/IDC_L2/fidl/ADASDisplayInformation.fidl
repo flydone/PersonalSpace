@@ -1,0 +1,34 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.IDC_L2_IDC1_5_IDC3_0_MDC_A
+
+interface ADASDisplayInformation {
+    version { major 1 minor 0 }
+    broadcast LocationDisp {
+        out {
+            LaneChangeZone LaneChangeZone //0
+        }
+    }
+    broadcast GuideLineCoordinate {
+        out {
+            Guide_Line_Points_Array Guide_Line_Points_Array //0
+        }
+    }
+    array Guide_Line_Points_Array of Guide_Line_Point
+    struct Guide_Line_Point {
+        Guide_Line_Point_x Guide_Line_Point_x
+        Guide_Line_Point_y Guide_Line_Point_y
+    }
+    typedef Guide_Line_Point_x is Float
+    typedef Guide_Line_Point_y is Float
+    enumeration LaneChangeZone {
+        E_NO_DISPLAY = 0
+        E_LEFT_SATISFIED = 1
+        E_RIGHT_SATISFIED = 2
+        E_LEFT_NOT_SATISFIED = 3
+        E_RIGHT_NOT_SATISFIED = 4
+    }
+}
+

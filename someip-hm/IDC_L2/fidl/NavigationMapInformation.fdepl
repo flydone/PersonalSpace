@@ -1,0 +1,27 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "NavigationMapInformation.fidl"
+
+define org.genivi.commonapi.someip.deployment for interface GREATWALL.MDC_A_IDC3_0.NavigationMapInformation {
+    SomeIpServiceID = 2050  //0x0802
+
+    method NavPathInfoReq {
+        SomeIpMethodID = 1  //0x0001
+        SomeIpReliable = true
+    }
+    broadcast AvlPathInfo {
+        SomeIpEventID = 32770  //0x8002
+        SomeIpReliable = true
+        SomeIpEventGroups = {2} //PathInfo0x0002
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for provider NavigationMapInformation {
+    instance GREATWALL.MDC_A_IDC3_0.NavigationMapInformation {
+        InstanceId = "NavigationMapInformation01"
+        SomeIpInstanceID = 1  //0x01
+    }
+}

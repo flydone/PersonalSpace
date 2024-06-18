@@ -1,0 +1,86 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.DVR_VIMS
+
+interface DVRSystemConfig {
+    version { major 1 minor 0 }
+    method ResetDefaultConfig {
+        in {
+            ResetConfigType ResetConfigType //0
+        }
+        out {
+            SetResult ResetConfigACK //0
+        }
+    }
+    method DVRGetConfig {
+        in {
+            GetAllConfig GetAllConfig //0
+            ConfigTypeList ConfigTypeList //1
+        }
+        out {
+            ConfigListArray ConfigListArray //0
+        }
+    }
+    method DVRSetConfig {
+        in {
+            ConfigListArray ConfigListArray //0
+        }
+        out {
+            SetResult ParamConfigResult //0
+        }
+    }
+    enumeration GetAllConfig {
+        E_GET_ALL_CONFIG = 0
+        E_GET_ARRAY_CONFIG = 1
+    }
+    enumeration SetResult {
+        E_SUCCESSFUL = 0
+        E_FAILED = 1
+    }
+    array ConfigTypeList of ParamConfigType
+    enumeration ParamConfigType {
+        E_SETWIDEDYNAMICMODE = 0
+        E_SETSEGMENTRECORDINGTIME = 1
+        E_SETPOWEROFFDELAY = 2
+        E_SETEVENTVIDEOCYCLECOVERAGE = 3
+        E_SETTAPERECORDING = 4
+        E_SETCYCLEVIDEOTAPEMODE = 5
+        E_SETINTERIORCAMERA = 6
+        E_SET360SURROUNDVIEW = 7
+        E_SETPARKMONITOR = 8
+        E_SETOSDINFO = 9
+    }
+    enumeration ResetConfigType {
+        E_RESUMEFACTORY = 0
+        E_PATCHUPGRADE = 1
+    }
+    array ConfigListArray of ParamCofigStruct
+    struct ParamCofigStruct {
+        ConfigParamValueType ConfigParamValueType
+        ParamConfigType ParamConfigType
+        ParamConfigOperation ParamConfigOperation
+        ConfigInfo ConfigInfo
+    }
+    enumeration ConfigParamValueType {
+        E_UINT8 = 0
+        E_UINT16 = 1
+        E_UINT32 = 2
+        E_UINT64 = 3
+        E_UTF8 = 4
+        E_ENUM = 5
+        E_BOOL = 6
+    }
+    typedef ConfigInfo is String
+    enumeration ParamConfigOperation {
+        E_ON = 0
+        E_OFF = 1
+        E_0S = 2
+        E_10S = 3
+        E_60SOR1MINUTE = 4
+        E_3MINUTE = 5
+        E_5MINUTE = 6
+    }
+}
+

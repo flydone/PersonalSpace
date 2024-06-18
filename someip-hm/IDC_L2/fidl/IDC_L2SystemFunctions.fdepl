@@ -1,0 +1,42 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import "platform:/plugin/org.genivi.commonapi.core/deployment/CommonAPI_deployment_spec.fdepl"
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "IDC_L2SystemFunctions.fidl"
+
+define org.genivi.commonapi.core.deployment for interface GREATWALL.IDC_L2_IDC1_5_IDC3_0_MDC_A.IDC_L2SystemFunctions {
+    enumeration ObjBarDisp_Type{
+        EnumBackingType = UInt8
+    }
+    enumeration Loc_Con_lane{
+        EnumBackingType = UInt8
+    }
+    enumeration OBJ_Type{
+        EnumBackingType = UInt8
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface GREATWALL.IDC_L2_IDC1_5_IDC3_0_MDC_A.IDC_L2SystemFunctions {
+    SomeIpServiceID = 2561  //0x0A01
+
+    attribute LocationInfoData {
+        SomeIpNotifierID = 36865  //0x9001
+        SomeIpEventGroups = {1} //LocnInfoData0x0001
+    }
+    attribute OBJPptyInfoData {
+        SomeIpNotifierID = 36868  //0x9004
+        SomeIpEventGroups = {4} //OBJInfoDataDisp0x0004
+    }
+    struct OBJPptyInfoStruct {
+        SomeIpStructLengthWidth = 4
+     }
+}
+
+define org.genivi.commonapi.someip.deployment for provider IDC_L2SystemFunctions {
+    instance GREATWALL.IDC_L2_IDC1_5_IDC3_0_MDC_A.IDC_L2SystemFunctions {
+        InstanceId = "IDC_L2SystemFunctions01"
+        SomeIpInstanceID = 1  //0x01
+    }
+}

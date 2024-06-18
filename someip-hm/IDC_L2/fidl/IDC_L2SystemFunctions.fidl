@@ -1,0 +1,122 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.IDC_L2_IDC1_5_IDC3_0_MDC_A
+
+interface IDC_L2SystemFunctions {
+    version { major 1 minor 0 }
+    attribute LocationInfoStruct LocationInfoData readonly
+    attribute OBJPptyInfoStruct OBJPptyInfoData readonly
+    struct LocationInfoStruct {
+        Loc_dis_left Loc_dis_left
+        Loc_dis_right Loc_dis_right
+        Loc_head_left Loc_head_left
+        Loc_head_right Loc_head_right
+        Loc_Con_lane Loc_Con_lane
+        Loc_lateral_pos Loc_lateral_pos
+        Loc_longitudinal_pos Loc_longitudinal_pos
+        Loc_Altitude_pos Loc_Altitude_pos
+        Loc_Altitude_pos_Con Loc_Altitude_pos_Con
+        Loc_heading Loc_heading
+        Loc_heading_Con Loc_heading_Con
+        Loc_TimeStamp Loc_TimeStamp
+        Loc_speed Loc_speed
+        Loc_speed_Con Loc_speed_Con
+        Loc_current_lane Loc_current_lane
+    }
+    typedef Loc_heading_Con is Float
+    typedef Loc_heading is Float
+    typedef Loc_TimeStamp is UInt64
+    typedef Loc_longitudinal_pos is Int32
+    typedef Loc_Altitude_pos is Int32
+    typedef Loc_speed is Float
+    typedef Loc_head_left is Float
+    typedef Loc_head_right is Float
+    enumeration Loc_Con_lane {
+        E_INIT = 0
+        E_HIGH = 1
+        E_MEDIUM = 2
+        E_LOW = 3
+    }
+    typedef Loc_dis_left is Float
+    typedef Loc_speed_Con is Float
+    typedef Loc_Altitude_pos_Con is Float
+    typedef Loc_lateral_pos is Int32
+    typedef Loc_current_lane is UInt8
+    typedef Loc_dis_right is Float
+    struct OBJPptyInfoStruct {
+        OBJ_TimeStamp OBJ_TimeStamp
+        OBJInfoStructArray OBJInfoStructArray
+        OBJ_DispProperty OBJ_DispProperty
+    }
+    array OBJInfoStructArray of OBJInfoStruct
+    struct OBJInfoStruct {
+        OBJ_ID OBJ_ID
+        OBJ_Type OBJ_Type
+        OBJ_Hight OBJ_Hight
+        OBJ_HeadingAngle OBJ_HeadingAngle
+        OBJ_DX OBJ_DX
+        OBJ_DY OBJ_DY
+        OBJ_ExistProb OBJ_ExistProb
+        OBJ_Age OBJ_Age
+    }
+    typedef OBJ_DX is Float
+    typedef OBJ_ID is UInt8
+    typedef OBJ_ExistProb is Float
+    enumeration OBJ_Type {
+        E_INVALID = 0
+        E_UNKNOWN_TYPE = 1
+        E_CAR = 2
+        E_TRUCK = 3
+        E_MOTORBIKE = 4
+        E_BICYCLE = 5
+        E_PEDESTRIAN = 6
+        E_GENERAL_OBJECT = 7
+        E_ANIMAL = 8
+        E_BUS = 9
+        E_TRAFFIC_CONE = 10
+        E_SUV = 11
+        E_TRICYCLIST = 12
+        E_TROLLEY = 13
+        E_PARKING_STOPPER = 14
+        E_WARNING_TRIANGLE = 15
+        E_PARKING_LOCK = 16
+        E_DUSTBIN = 17
+        E_BARRIER_STONE = 18
+        E_ANTICRACH_BUCKET = 19
+        E_PICKUP = 20
+        E_POLICE_CAR = 21
+        E_AMBULANCE = 22
+        E_WATER_BARRIER = 23
+        E_BOLLARD_SLEEVE = 24
+    }
+    typedef OBJ_HeadingAngle is Float
+    typedef OBJ_Age is Int32
+    typedef OBJ_Hight is Float
+    typedef OBJ_DY is Float
+    typedef OBJ_TimeStamp is UInt64
+    struct OBJ_DispProperty {
+        OBJ_DispProperty_Type Target_Obj
+        OBJ_DispProperty_Type Left_Target_Obj
+        OBJ_DispProperty_Type Right_Target_Obj
+        OBJ_DispProperty_Type Target_Obj_2
+        OBJ_DispProperty_Type Left_Target_Obj_2
+        OBJ_DispProperty_Type Right_Target_Obj_2
+        OBJ_DispProperty_Type Target_Obj_3
+        OBJ_DispProperty_Type Left_Target_Obj_3
+        OBJ_DispProperty_Type Right_Target_Obj_3
+    }
+    struct OBJ_DispProperty_Type {
+        OBJ_ID OBJ_ID
+        ObjBarDisp_Type ObjBarDisp
+    }
+    enumeration ObjBarDisp_Type {
+        E_NO_DISPLAY = 0
+        E_DISTANCE_1_ONE_BAR = 1
+        E_DISTANCE_2_TWO_BARS = 2
+        E_DISTANCE_3_THREE_BARS = 3
+        E_DISTANCE_4_FOUR_BARS = 4
+    }
+}
+

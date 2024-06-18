@@ -1,0 +1,28 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL_MDC_A_IDC1_5_IDC3_0_HAP
+
+interface HAVPandAVPFunctions {
+    version { major 1 minor 0 }
+    broadcast HAVPPathInfo {
+        out {
+            HAVPLearningWorldArray HAVPLearningWorldArray //0
+        }
+    }
+    broadcast HAVPRendergInfo {
+        out {
+            HAVPVehDataArray HAVPVehDataArray //0
+        }
+    }
+    broadcast HAVPPathMap {
+        out {
+            HAVPMapFileArray HAVPMapFileArray //0
+        }
+    }
+    array HAVPLearningWorldArray of UInt8
+    array HAVPVehDataArray of UInt8
+    array HAVPMapFileArray of UInt8
+}
+

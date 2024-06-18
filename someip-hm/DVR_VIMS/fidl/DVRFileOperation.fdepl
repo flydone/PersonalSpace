@@ -1,0 +1,129 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import "platform:/plugin/org.genivi.commonapi.core/deployment/CommonAPI_deployment_spec.fdepl"
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "DVRFileOperation.fidl"
+
+define org.genivi.commonapi.core.deployment for interface GREATWALL.DVR_VIMS.DVRFileOperation {
+    enumeration TFCardStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration SDCardOption{
+        EnumBackingType = UInt8
+    }
+    enumeration ExportFileACK{
+        EnumBackingType = UInt8
+    }
+    enumeration GetAllInfo{
+        EnumBackingType = UInt8
+    }
+    enumeration AccessType{
+        EnumBackingType = UInt8
+    }
+    enumeration TFAllFileCapacity_Enum{
+        EnumBackingType = UInt8
+    }
+    enumeration TFCardOption{
+        EnumBackingType = UInt8
+    }
+    enumeration RecordStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration FileType{
+        EnumBackingType = UInt8
+    }
+    enumeration ExportMode{
+        EnumBackingType = UInt8
+    }
+    enumeration SetResult{
+        EnumBackingType = UInt8
+    }
+    enumeration EMMCStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration ParamFileType_Enum{
+        EnumBackingType = UInt8
+    }
+    enumeration EventType{
+        EnumBackingType = UInt8
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface GREATWALL.DVR_VIMS.DVRFileOperation {
+    SomeIpServiceID = 1026  //0x0402
+
+    method AllFileDeleteRequest {
+        SomeIpMethodID = 11  //0x000B
+        SomeIpReliable = true
+    }
+    method FileListRequest {
+        SomeIpMethodID = 3  //0x0003
+        SomeIpReliable = true
+    }
+    method AllFileExportRequest {
+        SomeIpMethodID = 13  //0x000D
+        SomeIpReliable = true
+    }
+    method FileExportRequest {
+        SomeIpMethodID = 7  //0x0007
+        SomeIpReliable = true
+    }
+    method AsyncAllFileDeleteRequest {
+        SomeIpMethodID = 16  //0x0010
+        SomeIpReliable = true
+    }
+    method DVRFileCapacityInfoReq {
+        SomeIpMethodID = 17  //0x0011
+        SomeIpReliable = true
+    }
+    method SDCardFormat {
+        SomeIpMethodID = 4  //0x0004
+    }
+    method StartVideoBrowse {
+        SomeIpMethodID = 1  //0x0001
+    }
+    method FileListIncludeDateReq {
+        SomeIpMethodID = 18  //0x0012
+        SomeIpReliable = true
+    }
+    method FileDeleteRequest {
+        SomeIpMethodID = 5  //0x0005
+        SomeIpReliable = true
+    }
+    method TFCardInfoQuery {
+        SomeIpMethodID = 6  //0x0006
+    }
+    method SelectFileCapacityRequest {
+        SomeIpMethodID = 14  //0x000E
+        SomeIpReliable = true
+    }
+    method EMMCInfoQuery {
+        SomeIpMethodID = 8  //0x0008
+    }
+    method StopVideoBrowse {
+        SomeIpMethodID = 2  //0x0002
+    }
+    method SelectAllFileCapacityRequest {
+        SomeIpMethodID = 12  //0x000C
+        SomeIpReliable = true
+    }
+    method RecordEventStatusRequest {
+        SomeIpMethodID = 15  //0x000F
+        SomeIpReliable = true
+    }
+    struct FileListStruct {
+        SomeIpStructLengthWidth = 4
+     }
+    struct FileListIncludeDate_Struct {
+        SomeIpStructLengthWidth = 4
+     }
+}
+
+define org.genivi.commonapi.someip.deployment for provider DVRFileOperation {
+    instance GREATWALL.DVR_VIMS.DVRFileOperation {
+        InstanceId = "DVRFileOperation01"
+        SomeIpInstanceID = 1  //0x01
+    }
+}

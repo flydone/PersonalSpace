@@ -1,0 +1,150 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import "platform:/plugin/org.genivi.commonapi.core/deployment/CommonAPI_deployment_spec.fdepl"
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+import "DVRStatusReport.fidl"
+
+define org.genivi.commonapi.core.deployment for interface GREATWALL.DVR_VIMS.DVRStatusReport {
+    enumeration DVRSensorStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration TFCardStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration OMCCaptureFaileCode{
+        EnumBackingType = UInt8
+    }
+    enumeration EventOperationType{
+        EnumBackingType = UInt8
+    }
+    enumeration DVRSystemStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration ManualOperation{
+        EnumBackingType = UInt8
+    }
+    enumeration EMMCStatus{
+        EnumBackingType = UInt8
+    }
+    enumeration AccessType{
+        EnumBackingType = UInt8
+    }
+    enumeration SetResult{
+        EnumBackingType = UInt8
+    }
+    enumeration TFCardOption{
+        EnumBackingType = UInt8
+    }
+    enumeration EventType{
+        EnumBackingType = UInt8
+    }
+}
+
+define org.genivi.commonapi.someip.deployment for interface GREATWALL.DVR_VIMS.DVRStatusReport {
+    SomeIpServiceID = 1025  //0x0401
+
+    attribute DVRSensorStatusReport {
+        SomeIpGetterID = 4098  //0x1002
+        SomeIpNotifierID = 36866  //0x9002
+        SomeIpEventGroups = {2} //SensorStatusUpload0x0002
+    }
+    attribute DVRSystemStatusReport {
+        SomeIpGetterID = 4097  //0x1001
+        SomeIpNotifierID = 36865  //0x9001
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    method DVRContinuousCapture {
+        SomeIpMethodID = 4  //0x0004
+    }
+    method DVRStatusReportACK {
+        SomeIpMethodID = 1  //0x0001
+    }
+    method DVRTimelapseVideoTape {
+        SomeIpMethodID = 3  //0x0003
+    }
+    method DVRManualOperation {
+        SomeIpMethodID = 2  //0x0002
+    }
+    method StopShortVideoRecording {
+        SomeIpMethodID = 6  //0x0006
+    }
+    method PictureTransferRequest {
+        SomeIpMethodID = 11  //0x000B
+        SomeIpReliable = true
+        in{
+            EventTime{
+                SomeIpStringLength = 23
+                SomeIpStringLengthWidth = 0
+            }
+        }
+    }
+    method CaringMode {
+        SomeIpMethodID = 7  //0x0007
+    }
+    method OMCThemePictureResult {
+        SomeIpMethodID = 12  //0x000C
+        SomeIpReliable = true
+    }
+    method OMCCaptureRequest {
+        SomeIpMethodID = 10  //0x000A
+        SomeIpReliable = true
+        in{
+            EventTime{
+                SomeIpStringLength = 23
+                SomeIpStringLengthWidth = 0
+            }
+        }
+    }
+    method StartShortVideoRecording {
+        SomeIpMethodID = 5  //0x0005
+    }
+    method TFCardExportCapacityQuery {
+        SomeIpMethodID = 8  //0x0008
+    }
+    broadcast DVREMMCStatusReport {
+        SomeIpEventID = 32772  //0x8004
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    broadcast OMCThemePictureReport {
+        SomeIpEventID = 32774  //0x8006
+        SomeIpEventGroups = {3} //OMCThemePictureInfo0x0003
+    }
+    broadcast AsyncDeleteOperationProgress {
+        SomeIpEventID = 32775  //0x8007
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    broadcast EventOperationReport {
+        SomeIpEventID = 32769  //0x8001
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    broadcast DVRTFStatusReport {
+        SomeIpEventID = 32771  //0x8003
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    broadcast DVREventReport {
+        SomeIpEventID = 32770  //0x8002
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+        out{
+            EventTime{
+                SomeIpStringLength = 23
+                SomeIpStringLengthWidth = 0
+            }
+        }
+    }
+    broadcast ExportOperationProgressReport {
+        SomeIpEventID = 32773  //0x8005
+        SomeIpEventGroups = {1} //DVRSystemInfoReport0x0001
+    }
+    struct ExportFileInfoStruct {
+        SomeIpStructLengthWidth = 4
+     }
+}
+
+define org.genivi.commonapi.someip.deployment for provider DVRStatusReport {
+    instance GREATWALL.DVR_VIMS.DVRStatusReport {
+        InstanceId = "DVRStatusReport01"
+        SomeIpInstanceID = 1  //0x01
+    }
+}

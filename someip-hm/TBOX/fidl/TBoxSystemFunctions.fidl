@@ -1,0 +1,185 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxSystemFunctions {
+    version { major 1 minor 0 }
+    attribute DoubleGPSRawData DoubleGPSData readonly
+    attribute GPSRawData GPSData readonly
+    attribute GPSInfo GPSFunction readonly
+    method TBoxDTC {
+        out {
+            TBoxDTCCode TBoxDTCCode //0
+        }
+    }
+    method UpdateFileTransmit fireAndForget {
+        in {
+            UpgradeComplete UpgradeComplete //0
+        }
+    }
+    method TboxUpgrade fireAndForget {
+        in {
+            UpgradeRequst UpgradeRequst //0
+        }
+    }
+    method TBoxInfrastructureData {
+        out {
+            SN SN //0
+            FW0 FW0 //1
+            SW0 SW0 //2
+            FW1 FW1 //3
+            SW1 SW1 //4
+            COMP1 COMP1 //5
+            COMP2 COMP2 //6
+        }
+    }
+    method TBoxAPN2Operation {
+        in {
+            TBoxAPN2Operation TBoxAPN2Operation //0
+        }
+        out {
+            TBoxResponse TBoxResponse //0
+            TBoxAPN2Status TBoxAPN2Status //1
+        }
+    }
+    method TBoxLoggingDownload {
+        in {
+            LogDownloadCommand LogDownloadCommand //0
+        }
+        out {
+            ConnectionInfo ConnectionInfo //0
+        }
+    }
+    method TBoxReset {
+        in {
+            TBoxResetOption TBoxResetOption //0
+        }
+        out {
+            TBoxResponse TBoxResponse //0
+        }
+    }
+    method TBoxAPN2Status {
+        out {
+            TBoxAPN2Status TBoxAPN2Status //0
+        }
+    }
+    broadcast UpgradeProcess {
+        out {
+            UpgradeProcess UpgradeProcess //0
+        }
+    }
+    broadcast HeartbeatCheck {
+    }
+    broadcast TboxUpgrade {
+        out {
+            UpgradeResponse UpgradeResponse //0
+        }
+    }
+    broadcast TBOXCorrectionRTCMData {
+        out {
+            TBOXCorrection_RTCM32 TBOXCorrection_RTCM32 //0
+        }
+    }
+    broadcast QXRTCM_StatusInfo {
+        out {
+            QXRTCM_StatusCode QXRTCM_StatusCode //0
+        }
+    }
+    broadcast UpgradeResult {
+        out {
+            UpgradeResult UpgradeResult //0
+        }
+    }
+    array TBoxDTCCode of UInt32
+    typedef SN is String
+    typedef DoubleGPSRawData is String
+    typedef COMP2 is String
+    enumeration QXRTCM_StatusCode {
+        E_ACCOUNTAUTHSUCCEES = 2001
+        E_PPECERTIFICATESUCCEES = 2300
+        E_OSSCSCONNECTED = 2301
+        E_PPESTARTED = 2302
+        E_PPE_UPLOAD_GGA_SUCCESSFULLY = 2303
+        E_NETABNORMAL = 3001
+        E_ACCOUNTAUTHFAIL = 3002
+        E_AKASEXPIRED = 3003
+        E_MANUALMODEACCOUNTNOTBOUND = 3004
+        E_ACCOUNTNOTACTIVATED = 3005
+        E_NOACCOUNTAVAILABLE = 3006
+        E_ACCOUNTKICK = 3007
+        E_ACCOUNTEXPIRE = 3008
+        E_ABNORMALACCOUNTCONFIG_AK_AS = 3100
+        E_ABNORMALACCOUNTCONFIG_DID_DT = 3110
+        E_PPECERTIFICATFAILSOR_ALARM = 3300
+        E_PPEFAIL = 3301
+        E_EPHEMERISDATAFAIL = 4010
+        E_BASESTATIONUNAVAILABLE = 4111
+        E_BASESTATIONOBSUNAVAILABLE = 4112
+        E_POORGNSS = 4113
+        E_STARTCOMMANDFAIL = 4114
+        E_AGE60S = 4115
+        E_SYSTEMRESOURCEEXCEPTION = 4116
+        E_CSCONNECTIONFAIL = 4300
+        E_SSLERROR = 4311
+    }
+    enumeration UpgradeRequst {
+        E_REQUEST = 0
+        E_RESERVED = 1
+    }
+    typedef GPSRawData is String
+    typedef UpgradeProcess is UInt8
+    enumeration TBoxAPN2Operation {
+        E_CLOSE = 0
+        E_OPEN = 1
+    }
+    typedef COMP1 is String
+    typedef FW0 is String
+    enumeration UpgradeResult {
+        E_SUCCESS = 0
+        E_FAIL_FILE_NAME_WRONG = 1
+        E_FAIL_SAFETY_FAILED = 2
+        E_FAIL_VEHICLE_CONDITION_ABNORMAL = 3
+        E_FAIL_MCU_ABNORMAL = 4
+        E_FAIL_SOC_ABNORMAL = 5
+        E_FAIL_FIRMWARE_ABNORMAL = 6
+        E_FAIL_RESERVED_1 = 7
+    }
+    enumeration LogDownloadCommand {
+        E_DISABLE_LOG_DWN = 0
+        E_ENABLE_LOG_DWN = 1
+    }
+    array ConnectionInfo of UInt8
+    typedef SW1 is String
+    enumeration UpgradeComplete {
+        E_NOTIFY = 0
+        E_RESERVED = 1
+    }
+    enumeration TBoxResetOption {
+        E_MANUALRESET = 0
+        E_RESERVED = 1
+    }
+    enumeration TBoxResponse {
+        E_ACTIONFAILED = 0
+        E_ACTIONSUCCEED = 1
+    }
+    enumeration TBoxAPN2Status {
+        E_DISCONNECTED = 0
+        E_CONNECTED = 1
+    }
+    typedef FW1 is String
+    enumeration UpgradeResponse {
+        E_ALLOW = 0
+        E_NOTALLOW_VEHICLE_SOC_LOW = 1
+        E_NOTALLOW_VEHICLE_IS_NOT_IN_P_GEAR = 2
+        E_NOTALLOW_VEHICLE_SPEED_IS_NOT_0 = 3
+        E_NOTALLOW_T_BOX_HAS_CALL_SERVICE = 4
+        E_NOTALLOW_RESERVED_1 = 5
+        E_NOTALLOW_RESERVED_2 = 6
+    }
+    typedef GPSInfo is String
+    typedef SW0 is String
+    array TBOXCorrection_RTCM32 of UInt8
+}
+

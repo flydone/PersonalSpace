@@ -1,0 +1,136 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxTelephony {
+    version { major 1 minor 0 }
+    attribute TBoxSimStatusStruct TBoxSimStatus readonly
+    attribute TBoxSignalStrengthStruct TBoxSignalStrength readonly
+    attribute TBoxNetworkProviderStruct TBoxNetworkProvider readonly
+    method TBoxCallOperation {
+        in {
+            TBoxTelephoneNumber TBoxTelephoneNumber //0
+            TBoxCallType TBoxCallType //1
+            TBoxCallOperation TBoxCallOperation //2
+            long64 TBoxCallID_In //3
+        }
+        out {
+            TBoxResponse TBoxResponse //0
+            long64 TBoxCallID_Out //1
+        }
+    }
+    method TBoxSIMInfor {
+        out {
+            ICCID ICCID //0
+            IMEI IMEI //1
+            IMSI IMSI //2
+        }
+    }
+    method TBoxStartCall {
+        in {
+            TBoxTelephoneNumber TBoxTelephoneNumber //0
+            TBoxCallType TBoxCallType //1
+            long64 TBoxCallID_In //2
+        }
+        out {
+            TBoxResponse TBoxResponse //0
+            long64 TBoxCallID_Out //1
+        }
+    }
+    broadcast TBoxCallState {
+        out {
+            TBoxTelephoneNumber TBoxTelephoneNumber //0
+            TBoxCallType TBoxCallType //1
+            TBoxCallState TBoxCallState //2
+            long64 TBoxCallID //3
+        }
+    }
+    array TBoxTelephoneNumber of UInt8
+    struct TBoxNetworkProviderStruct {
+        MCC MCC
+        MNC MNC
+        NetworkProvider NetworkProvider
+    }
+    typedef MCC is UInt16
+    typedef NetworkProvider is String
+    typedef MNC is UInt8
+    enumeration TBoxCallType {
+        E_I_CALL = 0
+        E_B_CALL = 1
+        E_AUTO_E_CALL = 2
+        E_MANUAL_E_CALL = 3
+        E_VOICE_CALL = 4
+        E_VIDEO_CALL = 5
+        E_E_CALLBACK = 6
+        E_INCOMING_CALL = 7
+    }
+    enumeration TBoxResponse {
+        E_ACTIONFAILED = 0
+        E_ACTIONSUCCEED = 1
+    }
+    typedef IMSI is String
+    struct TBoxSimStatusStruct {
+        TBoxSimState TBoxSimState
+        TBoxSimMode TBoxSimMode
+    }
+    enumeration TBoxSimMode {
+        E_OUT_OF_COVERAGE = 0
+        E_SEARCHING = 1
+        E_FLIGHT_MODE = 2
+        E_LIMITED_SERVICE = 3
+        E_FULL_SERVICE = 4
+    }
+    enumeration TBoxSimState {
+        E_NORMAL = 0
+        E_LOCKED = 1
+        E_NOT_EXISTS = 2
+        E_ERROR = 3
+    }
+    enumeration TBoxCallOperation {
+        E_RESUME = 0
+        E_PAUSE = 1
+        E_ACCEPT = 2
+        E_REJECT = 3
+        E_HANGUP = 4
+        E_NOT_AUTHORIZED = 5
+    }
+    typedef long64 is Int64
+    typedef IMEI is String
+    typedef ICCID is String
+    struct TBoxSignalStrengthStruct {
+        TBoxNetType TBoxNetType
+        SignalStrenghRawData SignalStrengthRawData
+    }
+    enumeration TBoxNetType {
+        E_NONETWORKAVAILABLE = 0
+        E_GPRS = 1
+        E_EGPRS = 2
+        E_WCDMA = 3
+        E_HSDPA = 4
+        E_LTE = 5
+        E_5G = 6
+    }
+    typedef SignalStrenghRawData is Int16
+    enumeration TBoxCallState {
+        E_IDLE = 0
+        E_DIALING = 1
+        E_CALLING = 2
+        E_REMOTE_CALLING = 3
+        E_ACCEPTED = 4
+        E_REMOTE_ACCEPTED = 5
+        E_ON_GOING = 6
+        E_ON_HOLD = 7
+        E_HANGUP = 8
+        E_REMOTE_HANGUP = 9
+        E_REJECTED = 10
+        E_REMOTE_REJECTED = 11
+        E_NO_ANSWER = 12
+        E_BUSY = 13
+        E_CONNECTION_ERROR = 14
+        E_ECALL_ACTIVATED = 15
+        E_TERMINATED = 16
+    }
+}
+

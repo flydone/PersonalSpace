@@ -1,0 +1,85 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxReservationFunctions {
+    version { major 1 minor 0 }
+    attribute LocalFOTAResParStruct LocalFOTAResPar readonly noSubscriptions
+    attribute LocalChargeResParStruct LocalChargeResPar readonly noSubscriptions
+    method RemoteFOTAReservation fireAndForget {
+        in {
+            ReservationACK ReservationACK //0
+        }
+    }
+    method LocalChargeReservation {
+        in {
+            ChargMode ChargMode //0
+            TimeArray StartTime //1
+            Repeat Repeat //2
+            TimeArray EndTime //3
+        }
+        out {
+            ReservationACK ReservationACK //0
+        }
+    }
+    method LocalFOTAReservation {
+        in {
+            ReservationOperation ReservationOperation //0
+            TimeArray UpdateTime //1
+        }
+        out {
+            ReservationACK ReservationACK //0
+        }
+    }
+    method RemoteChargeReservation fireAndForget {
+        in {
+            ReservationACK ReservationACK //0
+        }
+    }
+    broadcast RemoteFOTAReservation {
+        out {
+            ReservationOperation ReservationOperation //0
+            TimeArray UpdateTime //1
+        }
+    }
+    broadcast RemoteChargeReservation {
+        out {
+            ChargMode ChargMode //0
+            TimeArray StartTime //1
+            Repeat Repeat //2
+            TimeArray EndTime //3
+        }
+    }
+    enumeration ChargMode {
+        E_IMMEDIATELY = 0
+        E_RESERVATION = 1
+    }
+    struct LocalFOTAResParStruct {
+        ReservationOperation ReservationOperation
+        TimeArray UpdateTime
+    }
+    enumeration ReservationOperation {
+        E_CANCEL = 0
+        E_SET = 1
+        E_CHANGE = 2
+    }
+    array TimeArray of UInt8
+    enumeration ReservationACK {
+        E_ACTIONFAILED = 0
+        E_ACTIONSUCCEED = 1
+        E_ACTIONNOTALLOWED = 2
+    }
+    enumeration Repeat {
+        E_ONLYONCE = 0
+        E_EVERYDAY = 1
+    }
+    struct LocalChargeResParStruct {
+        ChargMode ChargMode
+        TimeArray StartTime
+        Repeat Repeat
+        TimeArray EndTime
+    }
+}
+

@@ -1,0 +1,32 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface TBoxV2XSystemFunctions {
+    version { major 1 minor 0 }
+    attribute V2XStatus V2XFunctionStatus readonly
+    method V2XLockSwitch {
+        in {
+            V2XLOCKRequest V2XLOCKRequest //0
+        }
+        out {
+            V2XLOCKRespone V2XLOCKRespone //0
+        }
+    }
+    enumeration V2XLOCKRespone {
+        E_OFF = 0
+        E_ON = 1
+    }
+    enumeration V2XStatus {
+        E_DISABLE = 0
+        E_OFF = 1
+        E_ON = 2
+    }
+    enumeration V2XLOCKRequest {
+        E_OFF = 0
+        E_ON = 1
+    }
+}
+

@@ -1,0 +1,306 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.DVR_VIMS
+
+interface DVRFileOperation {
+    version { major 1 minor 0 }
+    method AllFileDeleteRequest {
+        in {
+            AccessType AccessType //0
+            FileType FileType //1
+        }
+        out {
+            SetResult FileDeleteACK //0
+        }
+    }
+    method FileListRequest {
+        in {
+            FileType FileType //0
+            AccessType AccessType //1
+            FileNumber FileNumber //2
+            FileName FileName //3
+        }
+        out {
+            FileListStructArray FileListStructArray //0
+        }
+    }
+    method AllFileExportRequest {
+        in {
+            ExportMode ExportMode //0
+            AccessType AccessType //1
+            FileType FileType //2
+        }
+        out {
+            ExportFileACK ExportFileACK //0
+        }
+    }
+    method FileExportRequest {
+        in {
+            ExportMode ExportMode //0
+            FileListPath FileListPath //1
+        }
+        out {
+            ExportFileACK ExportFileACK //0
+        }
+    }
+    method AsyncAllFileDeleteRequest {
+        in {
+            AccessType AccessType //0
+            FileType FileType //1
+        }
+        out {
+            SetResult FileDeleteACK //0
+        }
+    }
+    method DVRFileCapacityInfoReq {
+        in {
+            TFAllFileCapacity_Enum TFAllFileCapacity //0
+            TFCardFileTypeList_Array TFCardFileTypeList //1
+        }
+        out {
+            FileCapacityList_Array FileCapacityList //0
+        }
+    }
+    method SDCardFormat {
+        in {
+            SDCardOption SDCardOption //0
+        }
+        out {
+            SetResult TFCardFormatACK //0
+        }
+    }
+    method StartVideoBrowse {
+        in {
+            AccessType VideoBrowseChannel //0
+        }
+        out {
+            SetResult VideoBrowseACK //0
+        }
+    }
+    method FileListIncludeDateReq {
+        in {
+            FileType FileType //0
+            AccessType AccessType //1
+            FileNumber FileNumber //2
+            FileName FileName //3
+        }
+        out {
+            FileListIncludeDate_Array FileListIncludeDate //0
+        }
+    }
+    method FileDeleteRequest {
+        in {
+            FileListPath FileListPath //0
+        }
+        out {
+            SetResult FileDeleteACK //0
+        }
+    }
+    method TFCardInfoQuery {
+        in {
+            GetAllInfo GetAllInfo //0
+            TFCardOptionList TFCardOptionList //1
+        }
+        out {
+            TFCardInfoList TFCardInfoList //0
+        }
+    }
+    method SelectFileCapacityRequest {
+        in {
+            FileListPath FileListPath //0
+        }
+        out {
+            SetResult SetResult //0
+            FileCapacity FileCapacity //1
+        }
+    }
+    method EMMCInfoQuery {
+        in {
+            GetAllInfo GetAllInfo //0
+        }
+        out {
+            EMMCStatus EMMCStatus //0
+            EMMCCapacityStruct EMMCCapacityStruct //1
+        }
+    }
+    method StopVideoBrowse {
+        in {
+            AccessType VideoBrowseChannel //0
+        }
+        out {
+            SetResult VideoBrowseACK //0
+        }
+    }
+    method SelectAllFileCapacityRequest {
+        in {
+            AccessType AccessType_In //0
+            FileType FileType_In //1
+        }
+        out {
+            AccessType AccessType_Out //0
+            FileType FileType_Out //1
+            SelectAllFileCapacity SelectAllFileCapacity //2
+        }
+    }
+    method RecordEventStatusRequest {
+        in {
+            AccessType AccessType //0
+        }
+        out {
+            RecordStatus RecordStatus //0
+            EventType EventType //1
+        }
+    }
+    typedef SelectAllFileCapacity is UInt32
+    enumeration ExportFileACK {
+        E_EXPORTSUCCESS = 0
+        E_FILEMISSING = 1
+        E_CAPACITYWARNING = 2
+        E_ISDELETING = 3
+        E_OTHERREASON = 4
+    }
+    enumeration GetAllInfo {
+        E_GET_ALL_INFO = 0
+        E_GET_ARRAY_INFO = 1
+    }
+    array FileListStructArray of FileListStruct
+    struct FileListStruct {
+        FilePath FilePath
+        ThumbnailPath ThumbnailPath
+        FileType FileType
+        AccessType AccessType
+    }
+    typedef FilePath is String
+    typedef ThumbnailPath is String
+    enumeration FileType {
+        E_NORMALVIDEO = 0
+        E_EVENTVIDEO = 1
+        E_USERDATA = 2
+        E_EXPORTDATA = 3
+        E_SENTINELMODE = 4
+        E_GUARDIANMODE = 5
+    }
+    enumeration AccessType {
+        E_FORESIGHT = 0
+        E_WITHINSIGNT_OMC = 1
+        E_STREAMINGMEDIA_OR_BACKSIGNT_RESERVED = 2
+        E_360SURROUNDVIEW = 3
+        E_MULTICHANNEL = 4
+        E_WITHINSIGNT_DMC = 5
+    }
+    array TFCardInfoList of TFCardInfoStruct
+    struct TFCardInfoStruct {
+        TFCardOption TFCardOption
+        TFCardStatus TFCardStatus
+        TFCardCapacity TFCardCapacity
+    }
+    enumeration TFCardStatus {
+        E_DVR_NOT_FOUND = 0
+        E_DVR_FAULT = 1
+        E_DVR_MEMEORY_FULL = 2
+        E_DVR_OK = 3
+        E_WRITESLOWLY = 4
+        E_DVR_EMERGENCY_SPACE_FULL = 5
+        E_DVR_CAPACITY_NOT_SUPPORTED = 6
+    }
+    enumeration TFCardOption {
+        E_TFCARD1 = 0
+        E_TFCARD2 = 1
+    }
+    struct TFCardCapacity {
+        TotalCapacity TotalCapacity
+        RemainingCapacity RemainingCapacity
+    }
+    typedef RemainingCapacity is UInt32
+    typedef TotalCapacity is UInt32
+    enumeration EMMCStatus {
+        E_EMMCNORMAL = 0
+        E_EMMCFAULT = 1
+    }
+    typedef FileCapacity is UInt32
+    array FileListIncludeDate_Array of FileListIncludeDate_Struct
+    struct FileListIncludeDate_Struct {
+        FilePath FilePath
+        ThumbnailPath ThumbnailPath
+        FileType FileType
+        AccessType AccessType
+        EventTime EventTime
+        FileNumber FileNumber
+    }
+    typedef FileNumber is UInt8
+    typedef EventTime is String
+    array FileListPath of FilePath
+    typedef FileName is String
+    enumeration SetResult {
+        E_SUCCESSFUL = 0
+        E_FAILED = 1
+    }
+    enumeration RecordStatus {
+        E_INACTIVE = 0
+        E_ACTIVE = 1
+    }
+    enumeration SDCardOption {
+        E_SDCARD1 = 0
+        E_SDCARD2 = 1
+    }
+    enumeration EventType {
+        E_MANUALCAPTURE_BYBUTTON = 0
+        E_MANUALCAPTURE_BYHUT = 1
+        E_MANUALRECORDING_BYBUTTON = 2
+        E_MANUALRECORDING_BYHUT = 3
+        E_TIMELAPSEVIDEO = 4
+        E_PARKINGMONITORVIDEO = 5
+        E_VEHICLECOLLISIONVIDEO = 6
+        E_AIRBAGEJECTIONVIDEO = 7
+        E_AEBVIDEO = 8
+        E_BURGLARALARMVIDEO = 9
+        E_CONTINUOUSCAPTURE = 10
+        E_SHORTVIDEORECORDING_BYBUTTON = 11
+        E_SHORTVIDEORECORDING_BYHUT = 12
+        E_APSVIDEO = 13
+        E_ACC_AEBVIDEO = 14
+        E_WHISTLEVIDEO = 15
+        E_RADARRINGINGVIDEO = 16
+        E_MEBVIDEO = 17
+        E_HANDLEFTVIDEO = 18
+        E_CARINGMODE = 19
+        E_EXPORTFILE = 20
+        E_GUARDIANMODE = 21
+        E_DELETEFILE = 22
+        E_MANUALCAPTURE_BYFINDCAR = 23
+        E_SENTINELMODE_HIGH = 24
+        E_SENTINELMODE_LOW = 25
+    }
+    array TFCardOptionList of TFCardOption
+    enumeration ExportMode {
+        E_FILTERMODE = 0
+        E_COVERMODE = 1
+        E_COPYMODE = 2
+    }
+    enumeration TFAllFileCapacity_Enum {
+        E_GET_ALL_FILE_TYPE_CAPACITY = 0
+        E_GET_ARRAY_CAPACITY = 1
+    }
+    array FileCapacityList_Array of ParamFileCapacityStruct
+    struct ParamFileCapacityStruct {
+        ParamFileType_Enum ParamFileType
+        UsedCapacity_Integer UsedCapacity
+        TotalCapacity_Integer TotalCapacity
+    }
+    typedef UsedCapacity_Integer is Int32
+    typedef TotalCapacity_Integer is Int32
+    enumeration ParamFileType_Enum {
+        E_CUSTOMDATE = 0
+        E_EXPORTDATA = 1
+        E_SENTINELDATA = 2
+        E_GUARDDATA = 3
+    }
+    array TFCardFileTypeList_Array of ParamFileType_Enum
+    struct EMMCCapacityStruct {
+        TotalCapacity TotalCapacity
+        RemainingCapacity RemainingCapacity
+    }
+}
+

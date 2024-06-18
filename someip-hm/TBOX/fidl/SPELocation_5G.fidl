@@ -1,0 +1,100 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package GREATWALL.TBOX
+
+interface SPELocation_5G {
+    version { major 1 minor 0 }
+    attribute SPELocationStruct NtfSPELocation readonly
+    struct SPELocationStruct {
+        LocnFlags LocnFlags
+        UTCTimstamp UTCTimstamp
+        Latitude Latitude
+        Longitude Longitude
+        Alti Alti
+        HozlSpd HozlSpd
+        Bearing Bearing
+        HozlAccuracy HozlAccuracy
+        VertAccuracy VertAccuracy
+        SpdAccuracy SpdAccuracy
+        BearingAccuracy BearingAccuracy
+        GNSSInfoFlags GNSSInfoFlags
+        AltitudeMeanSeaLvl AltitudeMeanSeaLvl
+        PDOP PDOP
+        HDOP HDOP
+        VDOP VDOP
+        GDOP GDOP
+        TDOP TDOP
+        MagDe MagDe
+        HozlReliability HozlReliability
+        VerReliability VerReliability
+        HozlElliSemiMajor HozlElliSemiMajor
+        HozlElliSemiMinor HozlElliSemiMinor
+        HozlElliAzimuth HozlElliAzimuth
+        NorthStdDe NorthStdDe
+        EastStdDe EastStdDe
+        NorthVel NorthVel
+        EastVel EastVel
+        UpVel UpVel
+        NorthVelStdDe NorthVelStdDe
+        EastVelStdDe EastVelStdDe
+        UpVelStdDe UpVelStdDe
+        NumSvUsedInPosn NumSvUsedInPosn
+        GNSSSvUsedInPosn GNSSSvUsedInPosn
+        GNSSSysTim GNSSSysTim
+        MeasUsageCount MeasUsageCount
+        MeasUsageInfo MeasUsageInfo
+        NumLeapSeconds NumLeapSeconds
+        TimUnc TimUnc
+        LocnEngTyp LocnEngTyp
+        LocnEngMask LocnEngMask
+        Altityp Altityp
+    }
+    typedef AltitudeMeanSeaLvl is Float
+    typedef HozlAccuracy is Float
+    typedef UpVelStdDe is Float
+    typedef TimUnc is Float
+    typedef TDOP is Float
+    typedef LocnFlags is UInt16
+    typedef UTCTimstamp is UInt64
+    typedef EastVelStdDe is Float
+    typedef GDOP is Float
+    typedef EastStdDe is Float
+    typedef LocnEngTyp is UInt16
+    typedef MeasUsageCount is UInt16
+    typedef PDOP is Float
+    typedef HozlElliSemiMajor is Float
+    typedef UpVel is Float
+    typedef HozlSpd is Float
+    typedef NorthVelStdDe is Float
+    typedef NumSvUsedInPosn is UInt16
+    typedef EastVel is Float
+    typedef HozlElliAzimuth is Float
+    typedef Latitude is Double
+    typedef GNSSSysTim is UInt32
+    typedef BearingAccuracy is Float
+    typedef HDOP is Float
+    typedef GNSSSvUsedInPosn is UInt64
+    enumeration Altityp {
+        E_ASSUMED = 0
+        E_CALCULATED = 1
+    }
+    typedef HozlReliability is UInt16
+    typedef Longitude is Double
+    typedef SpdAccuracy is Float
+    typedef GNSSInfoFlags is UInt32
+    typedef NorthVel is Float
+    typedef NumLeapSeconds is UInt8
+    typedef Bearing is Float
+    typedef Alti is Double
+    typedef MeasUsageInfo is UInt16
+    typedef VDOP is Float
+    typedef NorthStdDe is Float
+    typedef MagDe is Float
+    typedef LocnEngMask is UInt32
+    typedef HozlElliSemiMinor is Float
+    typedef VerReliability is UInt16
+    typedef VertAccuracy is Float
+}
+

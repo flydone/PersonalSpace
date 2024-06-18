@@ -1,0 +1,260 @@
+cc_library_headers {
+    name: "someip-hm_dvr_headers",
+    vendor: true,
+    export_include_dirs: [
+        "DVR_VIMS/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_tbox_headers",
+    vendor: true,
+    export_include_dirs: [
+        "TBOX/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_avp_headers",
+    vendor: true,
+    export_include_dirs: [
+        "AVP/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_hap_headers",
+    vendor: true,
+    export_include_dirs: [
+        "HAP/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_idc_l2_headers",
+    vendor: true,
+    export_include_dirs: [
+        "IDC_L2/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_idc1_5_headers",
+    vendor: true,
+    export_include_dirs: [
+        "IDC1_5/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_library_headers {
+    name: "someip-hm_idc3_0_headers",
+    vendor: true,
+    export_include_dirs: [
+        "IDC3_0/src",
+        "include/CommonAPI-3.1",
+        "include/compat",
+    ],
+}
+
+cc_prebuilt_library_shared {
+    name: "libCommonAPI",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libCommonAPI.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libCommonAPI-SomeIP",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libCommonAPI-SomeIP.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libvsomeip",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libvsomeip.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libvsomeip3",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libvsomeip3.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libc++_shared",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libc++_shared.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libtbox_client",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libtbox_client.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libsomeip_avp",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libsomeip_avp.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libsomeip_hap",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libsomeip_hap.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libdvr_vims",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libdvr_vims.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libsomeip_idc_l2",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libsomeip_idc_l2.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libsomeip_idc1_5",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libsomeip_idc1_5.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}
+
+cc_prebuilt_library_shared {
+    name: "libsomeip_idc3_0",
+    arch: {
+         arm64: {
+             srcs: ["libs/arm64-v8a/libsomeip_idc3_0.so"],
+         },
+    },
+
+    strip: {
+        none: true,
+    },
+
+    compile_multilib: "64",
+    vendor: true,
+}

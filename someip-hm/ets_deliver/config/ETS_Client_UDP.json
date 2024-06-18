@@ -1,0 +1,28 @@
+{
+    "unicast" : "172.16.4.99",
+    "netmask" : "255.255.255.0",
+    "logging" :
+    {
+        "level" : "debug",
+        "console" : "true",
+        "file" : { "enable" : "true", "path" : "/data/misc/someip/vsomeip_etsclient.log" },
+        "dlt" : "true"
+    },
+    "diagnosis":"0x11",
+    "diagnosis_mask":"0xFF00",
+    "applications" :
+    [
+    	{
+            "name" : "SomeIP-ETS-Client",
+            "id" : "0x1444"
+        }
+    ],
+    "routing" : "SomeIP-ETS-Client",
+    "service-discovery" :
+    {
+        "enable" : "true",
+        "multicast" : "239.192.255.251",
+        "port" : "30490",
+        "protocol" : "udp"
+    }
+}
