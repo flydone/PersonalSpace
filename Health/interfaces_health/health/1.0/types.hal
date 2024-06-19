@@ -1,0 +1,77 @@
+/*************************************************************************
+* Copyright (C) 2020-2021 GWM Automotive Inc.
+*
+* The copyright notice above does not evidence any actual
+* or intended publication of such source code.
+* The code contains GWM Confidential Proprietary Information.
+*************************************************************************/
+
+package vendor.gwm.hardware.health@1.0;
+
+/**
+ * This enumeration is used to indicate error code return by interfaces.
+ */
+enum GWM_StatusCode: int32_t {
+    OK = 0,
+    ERROR = 1,
+}; 
+
+/**
+ * This enumeration is used to indicate system status through health check
+ */
+enum GWM_HealthSystemStatus: int32_t {
+   ALIVE = 0,
+   DEALIVE = 1,
+   MEM_LOW = 2,
+   CPU_HIGH = 3,
+   RESERVED = 4
+};
+
+/**
+ * This enumeration is used to indicate disk status
+ */
+enum GWM_HealthDiskStatus: int32_t {
+   CAPACITY_HIGH = 0,
+   CAPACITY_LOW  = 1,
+   RESERVED = 2,
+};
+
+/**
+ * This enumeration is used to define display panel index
+ *
+ */
+enum GWM_HealthDispIndex: int32_t {
+  IVI_DISPAYPANEL_ID = 0,
+  PVI_DISPLAYPANEL_ID = 1,
+  CLUSTER_DISPLAYPANEL_ID = 2,
+  CONSOLE_DISPLAYPANEL_ID = 3,
+  HUD_DISPLAYPANEL_ID = 4,
+};
+
+/**
+ * This enumeration is used to define partition index which need to monitor
+ *
+ */
+enum GWM_HealthDiskIndex: int32_t {
+  DATA_PARTITION_ID = 0,
+  PERSIST_PARTITION_ID = 1,
+  RESERVED = 2,
+};
+
+/**
+ * This enumeration is used to define VIP temperature state
+ */
+enum GWM_HealthTemperaState: int32_t {
+  LOW_SLEEP = 0,
+  NORMAL = 1,
+  HIGH_PROTECT = 2,
+  HIGH_SLEEP = 3,
+};
+
+/**
+ * This enumeration is used to define poweroff req from qnx host
+ */
+enum GWM_HealthPowerOffReq: int32_t {
+  SHUTDOWN = 0,
+  RESTART  = 1,
+};

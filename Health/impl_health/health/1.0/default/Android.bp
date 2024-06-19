@@ -1,0 +1,132 @@
+cc_library_headers{
+  name : "health_v1_0_common_headers",
+  vendor : true,
+  export_include_dirs : [
+    "impl/include",
+    "impl/src/fdbus/",
+    "impl/src/monitor/",
+    "impl/src/toolgen/soc/",
+  ],
+}
+
+cc_defaults{
+  name : "health_defaults",
+  header_libs : [
+    "health_v1_0_common_headers",
+  ],
+  shared_libs : [
+    "libhidlbase",
+    "libhidltransport",
+    "libbase",
+    "libcutils",
+    "liblog",
+    "libutils",
+    "vendor.gwm.hardware.health@1.0",
+    "vendor.gwm.hardware.logmaster@1.0",
+  ],
+  cflags : [
+    "-Wall", "-Wextra", "-Werror", "-Wno-unused-parameter",
+    "-Wno-ignored-attributes", "-Wno-implicit-function-declaration",
+    "-Wno-unused-private-field"
+  ],
+}
+
+cc_library_static{
+  name : "vendor.gwm.hardware.health@1.0-impl-lib",
+  relative_install_path : "hw",
+  defaults : ["health_defaults","Health_Config_build"],
+  vendor : true,
+  srcs : [
+    "impl/src/Health.cpp", 
+    "impl/src/HealthCallBack.cpp",
+    "impl/src/HealthDeathListener.cpp",
+    "impl/src/fdbus/HealthFdbusClient.cpp",
+    "impl/src/monitor/CPUMonitor.cpp",
+    "impl/src/monitor/MemoryMonitor.cpp",
+    "impl/src/monitor/DiskMonitor.cpp",
+    "impl/src/monitor/IptableMonitor.cpp",
+    "impl/src/monitor/EthconfigMonitor.cpp"
+  ],
+  static_libs : [
+    "vendor.gwm.hardware.health@1.0-libproto-fdbus-native",
+  ],
+  local_include_dirs : ["impl/include"],
+  export_include_dirs : ["impl/include"],
+  shared_libs : [
+    "libbase",
+    "libprotobuf-cpp-lite",
+    "libcommon-base",
+  ],
+  include_dirs :
+      [ "external/protobuf/src", "vendor/noch/common/external/fdbus/public" ],
+  cppflags : ["-fexceptions"]
+}
+
+cc_binary {
+name:
+  "vendor.gwm.hardware.health@1.0-service",
+    relative_install_path: "hw",
+    defaults: ["health_defaults"],
+    init_rc: ["vendor.gwm.hardware.health@1.0-service.rc"],
+    vendor: true,
+    srcs: [
+    "HealthService.cpp",
+    ],
+    static_libs: [
+	  "vendor.gwm.hardware.health@1.0-impl-lib",
+	  "vendor.gwm.hardware.health@1.0-libproto-fdbus-native",
+    ],
+    shared_libs:[
+    "libbase",
+    "libprotobuf-cpp-lite",
+    "libcommon-base",
+    ],
+    local_include_dirs: ["impl/include"],
+    cppflags: [
+        "-fexceptions"
+    ]
+}
+
+cc_binary {
+name:
+  "vendor.gwm.hardware.health@1.0-service-client",
+    relative_install_path: "hw",
+    defaults: ["health_defaults"],
+    vendor: true,
+    srcs: [
+    "tests/HealthClient.cpp",
+    ],
+    static_libs: [
+	  "vendor.gwm.hardware.health@1.0-impl-lib",
+    ],
+    shared_libs:[
+    "libbase",
+    "libcommon-base",
+    ],
+    local_include_dirs: ["impl/include"],
+    cppflags: [
+        "-fexceptions"
+    ]
+}
+
+bootstrap_go_package {
+    // name and pkgPath need to  according to your module
+    name: "soong-Health_Config_build",
+    pkgPath: "android/soong/HealthConfigbuild",
+    deps: [
+        "blueprint",
+        "blueprint-pathtools",
+        "soong",
+        "soong-android",
+        "soong-cc",
+        "soong-genrule",
+    ],
+    srcs: [
+          "HealthConfigbuild.go",
+    ],
+    pluginFor: ["soong_build"],
+}
+
+Health_Config_build {
+    name: "Health_Config_build",
+}

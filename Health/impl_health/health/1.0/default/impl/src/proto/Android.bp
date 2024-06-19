@@ -1,0 +1,21 @@
+// Health HAL Protobuf library
+cc_library_static {
+    name: "vendor.gwm.hardware.health@1.0-libproto-fdbus-native",
+    vendor: true,
+    proto: {
+        export_proto_headers: true,
+        type: "lite",
+    },
+    strip: {
+        keep_symbols: true,
+    },
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+    srcs: [
+      "common.base.lifecycle.proto",
+      "common.base.infrainfo.proto",
+      "common.base.mcuipcfdbus.proto",
+    ]
+}

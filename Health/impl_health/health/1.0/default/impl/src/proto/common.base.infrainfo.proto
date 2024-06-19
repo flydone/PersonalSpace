@@ -1,0 +1,30 @@
+/**
+ * Copyright (c) by nobo automotive system co.ltd.  All Rights Reserved.
+ *
+ * Brief: Infra info service interface.
+ * Author: hanxue
+ * Email: hanxue@noboauto.com
+ * Version: v 1.0
+ * Date: 2021.04.12
+ *
+ */
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package infrainfo;
+
+
+/**
+ * Infra info code ID.
+ */
+enum CodeId {
+    RQ_DISPLAY_INFO                                 = 0X00;  /* Special id for Engineering Test mode, raw data */
+    RQ_SENSORS_MESSAGE                              = 0X01;  /* Request sensors message from i2c */
+
+    BROADCAST_SOC_TEMPERATURE                       = 0X10;  /* Broadcast Soc temperature, raw data */
+    BROADCAST_CLUSTER_TEST                          = 0X20;  /* Broadcast cluster test message */
+    BROADCAST_SENSORS                               = 0X30;  /* Broadcast sensors message */
+    BROADCAST_ENGINEER_READY                        = 0X40;  /* Read screen message ready */
+}

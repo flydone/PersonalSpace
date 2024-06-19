@@ -1,0 +1,241 @@
+/* Copyright (C) 2020 NOCH Group
+ * Author : NOCH xinchongyang
+ * Version: v 1.0
+ * Data   ：2020.09.7
+ */
+syntax = "proto3";
+
+package lifecycle;
+
+option optimize_for = LITE_RUNTIME;
+
+/*lifecycle broadcast msg id
+ */
+enum BroadcastMsgId {
+  /*notify apps system need shutdown, the app should replay the
+     SHUTDOWN_QUERY_RESPONSE msg to notify lifecycle it whether to allow
+     shutdown  */
+  BROADCAST_NOTIFY_SHUTDOWN = 0x00;
+  /*broadcast ivi has ready*/
+  BROADCAST_NOTIFY_IVI_READY = 0x01;
+  /*broadcast ivi has shutdown*/
+  BROADCAST_NOTIFY_IVI_SHUTDOWN = 0x02;
+  /*query app status, app should reply QNX_APP_REPORT_STATUS message*/
+  BROADCAST_QUERY_APP_STATUS = 0x03;
+  /*notify ivi should shutdown*/
+  BROADCAST_IVI_SHOULD_SHUTDOWN = 0x04;
+  /*broadcast the ivi status to other modules*/
+  BROADCAST_IVI_STATUS = 0x05;
+  /*notify apps system need quit shutdown*/
+  BROADCAST_NOTIFY_QUIT_SHUTDOWN = 0x06;
+  /*notify apps soc power off*/
+  BROADCAST_NOTIFY_SOC_POWER_OFF = 0x07;
+  /*notify vehicle power status*/
+  BROADCAST_NOTIFY_VEHICLE_POWOR_STATUS = 0x08;
+};
+
+/*lifecyele requset msg code*/
+enum EventMsgId {
+  /*the msg which use for apps notify lifecycle it whether to allow shutdown*/
+  SHUTDOWN_QUERY_RESPONSE = 0x00;
+  /*the msg which use for apps request lifecyce to reset the hut*/
+  HUT_RESET_REQUSET = 0x01;
+  /*the msg which use for ivi heartbeat*/
+  IVI_HEARTBEAT = 0x02;
+  /*ivi request restart*/
+  IVI_RESTART_REQ = 0x03;
+  /*ivi ready notify*/
+  IVI_READY_NOTIFY = 0x04;
+  /*ivi shutdown notify*/
+  IVI_SHUTDOWN_NOTIFY = 0x05;
+  /*app report status*/
+  QNX_APP_REPORT_STATUS = 0x06;
+  /*get ivi status*/
+  GET_IVI_STATUS = 0x07;
+  /*test interface for nfsd test*/
+  IVI_REQ_SOC_RESET = 0x08;
+};
+
+/*module identify*/
+enum ModuleId {
+  // INFRA
+  IPC_GATEWAY = 0x00;
+  LOG_SERVICE = 0x01;
+  PSS_SERVICE = 0x02;
+  UD_UPDATE_SERVICE_MSG = 0x03;
+  // WARNING_SERVICE_MSG = 0x04;
+  RECOVERY_SERVICE = 0x05;
+  LAYER_MGR = 0x06;
+  NAME_SERVER = 0x07;
+  HOST_SERVER = 0x08;
+  VCONFIG_SERVICE = 0x09;
+  DIAG_EOL_SERVICE = 0x0a;
+  CAN_SERVICE = 0x0b;
+  AUDIO_MANAGER = 0x0c;
+  DISPLAY_SERVICE = 0x0d;
+  FOTA_INSTALL_SERVICE = 0x0e;
+  INFRA_SYSTEM_SERVICE = 0x0f;
+  INFO_SERVICE = 0x10;
+  DVR_SERVICE = 0x12;
+  NFSD = 0x13;
+
+  // HMI
+  HMI_NOBO_CLUSTER = 0x14;
+  HMI_NOBO_WHUD = 0x15;
+  HMI_SAFETY_CLUSTER = 0x16;
+
+  // CLUSTER
+  CLUSTER_SAFETY = 0x11;
+  CLUSTER_GAUGE = 0x17;
+  CLUSTER_IVIINTERFACE = 0x18;
+  CLUSTER_NORMAL_SERVICE = 0x19;
+  CLUSTER_WHUD = 0x20;
+
+  BOOT_ANIMATION = 0x2a;
+};
+
+/*QNX_APP_REPORT_STATUS*/
+message QnxAppReportStatus {
+  enum AppStatus {
+    OK = 0x00;
+    NEED_RESTART = 0x01;
+    NEED_KILL = 0x02;
+  };
+
+  ModuleId module_id = 1;
+  AppStatus status = 2;
+};
+
+/*requset ivi restart
+ * reason:
+ * 0: not use
+ * 1: ivi dealive
+ * 2: ivi mem low
+ * 3: ivi cpu high
+ * 4 ~10 ivi reserved
+ *
+ * 11: hard key 10s
+ */
+message IviRestartReq {
+  int32 reason = 1;
+}
+
+message IviRestartReqRes {
+  enum ReqRes {
+    REQ_SUCCESS = 0x00;
+    REQ_FAILED = 0x01;
+  };
+  ReqRes res = 1;
+}
+
+/*ivi shut down notify*/
+enum IviShutdownReason {
+  RECOVERY = 0x00;
+  POWER_OFF = 0x01;
+  VCFG_UPDATE = 0x02;
+};
+
+message IviShutdownNotify {
+  IviShutdownReason reason = 1;
+}
+
+/*ivi heart beat*/
+message IviHeartBeat {
+  int32 ivi_status = 1;
+}
+
+message IviHeartBeatRes {
+  int32 heartbeat_ack = 1;
+}
+
+/*
+ * BROADCAST_NOTIFY_IVI_READY
+ * IVI_READY_NOTIFY
+ */
+
+/*ivi ready*/
+enum IviReadyStatus {
+  IVI_READY = 0x00;
+  IVI_SHUTDOWN = 0x01;
+  IVI_READY_TIMEOUT = 0x02;
+}
+
+message IviReadyNotify {
+  IviReadyStatus ivi_ready_status = 1;
+}
+
+/*BROADCAST_NOTIFY_SHUTDOWN msg content*/
+message NotifyShutdownMsg {
+  BroadcastMsgId msg_id = 1;
+}
+
+/*SHUTDOWN_QUERY_RESPONSE msg content(send)*/
+message ShutdownQueryResMsg {
+  enum ShutdownStatus {
+    ALLOW_SHUTDOWN = 0x00;
+    NOT_ALLOW_SHUTDOWN = 0x01;
+  }
+  ModuleId module = 1;
+  ShutdownStatus status = 2;
+}
+
+/* HUT_RESET_REQUSET msg content(request)*/
+message HutResetReqMsg {
+  enum Parameter {
+    NORMAL = 0x00;
+    MIN_OS = 0x01;
+  };
+  enum ResetReason {
+    UPDATAE = 0x00;
+    RECOVERY = 0X01;
+    MINIUPGRADE_JDG = 0X02;
+    VCFG_UPDATE = 0x03;
+  };
+  ModuleId module = 1;
+  Parameter para = 2;
+  ResetReason reason = 3;
+}
+
+/* HUT_RESET_REQUSET msg content(response)*/
+message HutResetResMsg {
+  enum ResetReqRet {
+    ALLOW = 0;
+    NOT_ALLOW = 1;
+  };
+  ModuleId module = 1;
+  ResetReqRet ret = 2;
+}
+
+/* BROADCAST_IVI_STATUS
+ */
+message BroadcastIviStatusMsg {
+  /*
+   *  STOPPED         0x00  ivi not run
+   *  STARTING        0x01  qvm is started but not receive the ready msg
+   *  RUNNING         0x02  lifecycle had received the ivi ready msg
+   *  STOPPING        0x03  ivi is stopping but not receive the vmm service
+   * shutdown notify
+   *  QVM_STARTING    0x04  qvm is starting
+   */
+  int32 status = 1;
+};
+
+/*BROADCAST_NOTIFY_VEHICLE_POWOR_STATUS*/
+message BroadcastVehiclePowerStatus {
+  /*
+  * OFF = 0;
+  * SHUTDOWN = 01;
+  * ON = 02;
+  * SOC_OFF = 03;
+  */
+  int32 status = 1;
+};
+
+/*BROADCAST_IVI_SHOULD_SHUTDOWN*/
+message BroadcastIviShouldShutdown {
+  /*
+  * 0 = 10s hard key
+  * 1 = fota update
+  */
+  int32 reason = 1;
+};

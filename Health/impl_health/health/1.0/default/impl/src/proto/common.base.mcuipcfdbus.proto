@@ -1,0 +1,111 @@
+/* Copyright (C) 2020 NOCH Group
+ * Author : NOCH hanxue (hanxue@noboauto.com)
+ * Version: v1.9.0
+ * Data   ：2020.9.1
+ * Refer: http://10.52.245.125:8090/display/PROJV3X/%5BV3.5%5D+MCU-IPC-FDBUS+proto
+ *
+ * History:
+ * v1.8.0, 2020.8.3, jfq, add new group id and major message id.
+ * v1.8.2, 2020.8.13, jfq, add power major message id.
+ * v1.8.3, 2020.8.24, jfq, delete BROADCAST_CAN_CLUSTERSOC and BROADCAST_CAN_ALL.
+ * v1.9.0, 2020.9.1, jfq, add BROADCAST_MISC_IVI_INFO.
+ * v1.9.1, 2020.9.2, jfq, add BROADCAST_IVI_APP.
+ * v1.9.3, 2020.10.12, jfq, add BROADCAST_INFRA_MISC.
+ */
+syntax = "proto3";
+
+package mcugateway;
+
+/* The flags that clients sends message or registers:
+ * clients invoke flags:
+ *            SEND_MESSAGE : The flag that the client sends the message
+ * clients subscribe and onBroadcast flags:
+ *            BROADCAST_CAN : The client registers with the server and receives the broadcast flag
+ *            ...
+ */
+enum CodeId {
+    /* SOC APP --> MCU_IPC_SERVICE --> MCU, SOC APP send messages to MCU. */
+    SEND_MESSAGE                    = 0x000;
+
+    /* SOC APP <-- MCU_IPC_SERVICE <-- MCU, SOC APP receive messages from MCU. */
+    BROADCAST_CAN                   = 0X0100;   /* CAN messages broadcast to android(IVI) or QNX. */
+    BROADCAST_POWER                 = 0X0200;   /* SOC Manager */
+    BROADCAST_POWER_SYSTEMSTATE     = 0X0201;   /* Power system state */
+    BROADCAST_POWER_INFO            = 0X0202;   /* Power info, eg: voltage/ temperature */
+    BROADCAST_EOL_QNX               = 0X0300;
+    BROADCAST_EOL_IVI               = 0X0301;
+    BROADCAST_EOL_CLUSTER           = 0X0302;
+    BROADCAST_EOL_HUD               = 0X0303;
+    BROADCAST_EOL_CONSOLE           = 0X0304;
+    BROADCAST_SWUM                  = 0X0400;
+    BROADCAST_DIAGNOSIS_QNX         = 0X0500;
+    BROADCAST_DIAGNOSIS_IVI         = 0X0501;
+    BROADCAST_DIAGNOSIS_CLUSTER     = 0X0502;
+    BROADCAST_DIAGNOSIS_HUD         = 0X0503;
+    BROADCAST_DIAGNOSIS_CONSOLE     = 0X0504;
+    BROADCAST_LOG                   = 0X0600;
+    BROADCAST_DISPLAY               = 0X0700;   /* Reserved. */
+    BROADCAST_KEY                   = 0X0800;   /* Reserved. */
+    BROADCAST_SENSORS               = 0X0900;
+    BROADCAST_MISC_RTC              = 0X0A00;
+    BROADCAST_MISC_SERVICE          = 0X0A01;
+    BROADCAST_MISC_IVI_INFO         = 0X0A02;   /* Contains: Set or get driver mode. */
+    BROADCAST_ENGINEER_MODE         = 0X0B00;
+    BROADCAST_AUDIO                 = 0X0C00;
+    BROADCAST_CLUSTERAPP            = 0X0D00;
+    BROADCAST_CLUSTERAPP_SYSTEM     = 0X0D01;   /* group id: Cluster APP, major msg id: system */
+    BROADCAST_HUDAPP                = 0X0E00;
+    BROADCAST_CONSOLE               = 0X0F00;
+    BROADCAST_IVI_APP               = 0X1000;   /* Contains: Set or get driver mode. */
+    BROADCAST_INFRA_MISC            = 0X1100;   /* infrastructure miscellaneous settings and info. */
+}
+
+/* The interface through which the client sends the message:
+ * in   : Parameters sent by the client
+ *        app_data : Messages sent by the client cannot exceed the maximum length,the maximum is 1024
+ *        priority : The priority of the message, HIGH or LOW
+ */
+message FdbSendMessageRequest {
+    /* Task priority:
+     * HIGH : clusters use high priority
+     * LOW  : other modules use low priority
+     */
+    enum  PriorityEnum {
+        LOW = 0;
+        HIGH = 1;
+    }
+
+    PriorityEnum priority = 1;
+
+    bytes app_data = 2;
+}
+
+
+/* The interface through which the client sends the message:
+ * out  : The result of a message being queued
+ *        return_enum   : SUCCESS or QUEUE_FULL_FAILED or DATA_LENGTH_EXCEED_BOUNDARY_FAILED
+ */
+message FdbSendMessageResponse {
+    /* Queued return value:
+     * DATA_LENGTH_EXCEED_BOUNDARY_FAILED : The message is too long, resulting in an overflow
+     * QUEUE_FULL_FAILED                  : The queue is full
+     * SUCCESS                            : Enqueue successfully
+     */
+    enum  ReturnEnum {
+        DATA_LENGTH_EXCEED_BOUNDARY_FAILED = 0;
+        QUEUE_FULL_FAILED = 1;
+        SUCCESS = 2;
+    }
+
+    ReturnEnum return_enum = 1;
+}
+
+/* The interface to which the server broadcasts messages:
+ * out  : The server broadcasts the parameters of the message
+ *        data_len  : The length of the sub message id and data
+ *        mcu_data  : Messages broadcast by the server cannot exceed the maximum length,the maximum is 1024
+ */
+message FdbBroadcastMessage {
+    bytes mcu_data = 1;
+    int32 data_len = 2;
+}

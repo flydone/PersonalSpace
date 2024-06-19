@@ -1,0 +1,6 @@
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/health/1.0/default/impl/src/fdbus
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/health/1.0/default/impl/src/monitor
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/health/1.0/default/impl/src/toolgen/soc
+android/vendor/noch/project/v3.5/sa8155/interfaces/impl/health/1.0/default/impl/include
+android/vendor/noch/common/external/fdbus/public
+android/external/protobuf/src

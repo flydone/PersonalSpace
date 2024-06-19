@@ -1,0 +1,46 @@
+/*************************************************************************
+* Copyright (C) 2020-2021 GWM Automotive Inc.
+*
+* The copyright notice above does not evidence any actual
+* or intended publication of such source code.
+* The code contains GWM Confidential Proprietary Information.
+*************************************************************************/
+
+package vendor.gwm.hardware.health@1.0;
+import IHealthCallBack;
+
+interface IHealth {
+  /*
+   * called by HMI to notify system is under ready status.
+   *
+   * @param  none
+   * @return Status Code
+   */
+   gwm_systemReady () generates (GWM_StatusCode status);
+
+
+  /*
+   * called by HMI to notify system to shutdown.
+   *
+   * @param  none
+   * @return Status Code
+   */
+   gwm_systemShutdowm () generates (GWM_StatusCode status);
+
+  /*
+   * register health callback
+   * @param callback
+   * @return Status Code
+   */
+   gwm_registerCallback(IHealthCallBack callback) generates (GWM_StatusCode status);
+
+  /*
+   * called by HMI to notify system to update vehicle cfg
+   *
+   * @param  none
+   * @return Status Code
+   */
+   gwm_systemVcfgUpdate () generates (GWM_StatusCode status);
+
+};
+

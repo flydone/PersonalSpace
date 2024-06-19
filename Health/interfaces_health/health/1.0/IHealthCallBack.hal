@@ -1,0 +1,20 @@
+/*************************************************************************
+* Copyright (C) 2020-2021 GWM Automotive Inc.
+*
+* The copyright notice above does not evidence any actual
+* or intended publication of such source code.
+* The code contains GWM Confidential Proprietary Information.
+*************************************************************************/
+
+package vendor.gwm.hardware.health@1.0;
+
+interface IHealthCallBack {
+    oneway gwm_onReportSystemStatus(GWM_HealthSystemStatus status);
+    oneway gwm_onReportSOCBoardTemp(int32_t temp);
+    oneway gwm_onReportSOCChipTemp(int32_t temp);
+    oneway gwm_onReportVIPBoardTemp(float temp, GWM_HealthTemperaState tempState);
+    oneway gwm_onReportVIPChipTemp(float temp);
+    oneway gwm_onReportDisPanelTemp(GWM_HealthDispIndex dispanel_id, int32_t temp);
+    oneway gwm_onReportDiskStatus(GWM_HealthDiskIndex diskpart_id, GWM_HealthDiskStatus status);
+    oneway gwm_onReqPowerOff(GWM_HealthPowerOffReq req);
+};
